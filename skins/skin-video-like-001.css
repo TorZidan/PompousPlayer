@@ -1,0 +1,222 @@
+/* video-like-001 skin start */
+.pompous-video-like-splash {
+  display:block;
+  position:absolute;
+  visibility: visible;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  left:0;
+  top:0;
+  background: black;
+  z-index: 2147483646;
+}
+.pompous-video-like-navigation {
+	 width: 100%;
+   height: 35px;
+	 left: 0;
+   bottom: 0;
+   position: absolute;
+   visibility: visible;
+   display: flex;
+   flex-wrap: nowrap;
+   justify-content: space-between;
+   z-index: 2147483647;
+   background:rgba(0, 0, 0, 0.7);
+   transition: opacity 500ms linear 0s; 
+   opacity: 0;
+   /* prevent selecting the button icons and text on double-click: */
+   -webkit-user-select: none;        
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+   color: white;
+   font-family: Arial;
+   font-size: 16px;
+}
+.pompous-video-like-nav-inner {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  white-space: nowrap;
+}
+.pompous-nav-button {
+  color: #E5E5E5;
+  /* background-color: rgba(50,50,50,0.55); */
+  padding: 7px 12px;
+  display: inline-block;
+  font-size: 18px;
+  cursor: default;
+  margin: 0 0 0 5px;
+  /* prevent selecting the button icons / text on double-click: */
+  -webkit-user-select: none;        
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.pompous-status-bar {
+	color: white;
+}
+.pompous-share-menu {
+	position: absolute;  
+	white-space: normal;
+  background-color: #efefef;
+  border:1px solid #000;
+  box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+  bottom: 35px;
+  right:40px;
+  width:250px;
+}
+.pompous-share-menu .button {
+  background-color:#efefef;
+  text-align:left;
+  white-space: nowrap; 
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0;
+  border:0;
+  width:250px;
+  vertical-align: middle;
+  cursor:pointer;
+ }
+ 
+.pompous-share-menu .button:hover {
+  background-color:#ddd;
+}
+.pompous-share-menu .button i {
+   margin:0 .125em 0 0;
+   padding:0;
+   font-size:1.5em;
+   width:30px;
+   background-collor:#ddd;
+}
+.pompous-video-like-nav-filler {
+  flex: 1;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  width: 100%;
+  left: 0;
+  padding: 5px 10px;
+  touch-action: none;
+  box-sizing: border-box;
+}
+.pompous-progress-container {
+  left: 0;
+  max-width: 400px;
+}
+.pompous-progress-rail {
+  left:0;
+  width: 100%;
+  background-color: #e9e9e9;
+  height: 6px;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+.pompous-progress-track {
+  left: 0;
+  height: 6px;
+  border-radius: 6px;
+  background-color: #ff0100;
+  margin-top: -6px;
+}
+.pompous-progress-handle {
+  position:relative;
+  margin-left: -7px;
+  margin-top: -12px;
+  width: 14px;
+  height: 14px;
+  cursor: -webkit-grab;
+  cursor: grab;
+  border-radius: 50%;
+  border: solid 2px #ff0100;
+  background-color: #ff0100;
+  touch-action: pan-x;
+}
+.pompous-progress-handle:hover {
+  border: solid 4px #ff0100;
+}
+.pompous-progress-handle:focus {
+  outline: none;
+}
+.pompous-nav-current-play-time {
+  margin-left: 7px;
+  margin-right: 4px;
+}
+.pompous-nav-total-play-time {
+  margin-left: 4px;
+  margin-right: 7px;
+}
+@media (max-width: 1200px) { 
+  .pompous-video-like-navigation{
+    height:5%;
+  }
+  .pompous-nav-button {
+    font-size:28px;
+    margin: 0 0 0 45px;
+  }
+  .pompous-video-like-nav-filler {
+    padding:1% 10px;
+  }
+}
+@media (max-width: 992px) { 
+  .pompous-video-like-navigation{
+    height:5%;
+  }
+  .pompous-nav-button {
+    font-size:40px;
+    margin: 0 0 0 45px;
+  }
+  .pompous-video-like-nav-filler {
+    padding:1% 10px;
+  }
+}
+@media (max-width:768px) {
+  .pompous-video-like-navigation{
+    height:10%;
+  }
+  .pompous-nav-button {
+    font-size:60px;
+    margin: 0 0 0 45px;
+  }
+  .pompous-video-like-nav-filler {
+    padding:2% 10px;
+  }
+  .pompous-progress-rail{
+      height:10px;
+   }
+  .pompous-progress-track{
+    height:10px;
+    margin-top:-10px;
+  }
+}
+
+@media (max-width:650px) {
+  .pompous-video-like-navigation{
+    height:8%;
+  }
+  .pompous-nav-button {
+    font-size:4rem;
+    margin: 0 0 0 45px;
+  }
+  .pompous-video-like-nav-filler {
+    padding:1% 10px;
+  }
+}
+@media (max-width:250px) {
+  .pompous-video-like-navigation{
+    height:10%;
+  }
+  .pompous-nav-button {
+    font-size:95px;
+    margin: 0 0 0 45px;
+  }
+}
+.pompous-loader-div {
+  position:absolute; 
+  left: 50%; 
+  top:50%; 
+  width: 200px; 
+  height: 200px; 
+  margin-left:-100px; 
+  margin-top:-100px;
+}
+/* video-like-001 skin end */

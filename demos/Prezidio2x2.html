@@ -1,0 +1,318 @@
+<!-- 
+This demo presentation zooms in-and-out on individual slides arranged in a 2 x 2 grid.
+
+Most of the file content is boilerplate css and html code for the video-like navigation bar.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Four images assembled in a 2 x 2 grid</title>
+
+<!-- These free fontawesome icons are used for the video-like navigation bar. -->
+<link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../skins/stage.css" />
+<link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+
+<!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
+<script type="text/javascript" src="../js/pp-dependencies.js"></script>
+
+<!-- Contains the Pompous Player JS code, minified -->
+<script type="text/javascript" src="../js/pp-player.min.js"></script>
+
+<!-- Contains the JS code for all Pompous Player "skins" -->
+<script type="text/javascript" src="../js/pp-skins.js"></script>
+
+<!-- Optionally, you can replace the three JS files above with one:  
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+-->
+
+<script>
+const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false});
+const pompousOptions = {
+   autoStart: "true",
+   autoRestartAtEnd: false, 
+   startBlank: true,
+   designWidth: 1920,
+   designHeight: 1080,
+   stageId: "the-pompous-stage",
+   loadNImagesAhead: 5,
+   autoStartAudioMuted: true,
+   audio: "",
+   webfonts: {
+             },
+   pompousEventNotifier: pompousNavigation,
+   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
+   afterInit: () => {updateStageScale(pompousPlayer)},
+   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+};
+const pompousPlayer = new PompousPlayer(pompousOptions);
+
+ppDocumentReady( () => {
+  pompousPlayer.getStageElement().focus();
+  
+  //Listen for touch events on mobile devices:
+  new PompousMobileTouchListener(
+    document,
+    (swipeDirection) => {
+      if(swipeDirection==="right") {
+        pompousPlayer.playPreviousAnimation();
+      } else if(swipeDirection==="left") {
+        pompousPlayer.playNextAnimation();
+      }
+    }
+  );
+});
+
+// On each window resize: resize the stage div element to fit the window/iframe width AND height:
+window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
+</script>
+
+<style>
+/* ================= Slideshow css begin ================= */
+
+/* Sets the visibility to hidden, opacity to 0 */
+.initially-hidden
+{
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Slowly fades-in the html element, by changing it's opacity from 0 to 1. */
+.fade-in
+{
+  visibility: visible;
+  --pp-opacity-from: 0;
+  opacity: 1;
+  transition-property: opacity;
+  transition-timing-function: linear;
+  transition-duration: 0.5s;
+}
+
+/* ... */
+.bg-image-initial-1
+{
+  background-image: url('../demo-resources/flower1.jpg');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* ... */
+.bg-image-initial-2
+{
+  background-image: url('../demo-resources/flower2.jpg');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 1920px;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* ... */
+.bg-image-initial-3
+{
+  background-image: url('../demo-resources/flower3.jpg');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 1080px;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* ... */
+.bg-image-initial-4
+{
+  background-image: url('../demo-resources/flower4.jpg');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 1080px;
+  left: 1920px;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+.zoomed-out-initial {
+  transition-property: transform;
+  transform-style: preserve-3d;
+  transform: translateZ(-1000px) translateX(-960px) translateY(-540px);
+}
+
+.initially-hidden {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/*
+   Note the line
+   --pp-transform-from: translateZ(-1000px) translateX(-960px) translateY(-540px);
+   This is not standard CSS; this is how the Pompous player knows the initial transition value (at the start of the animation).
+   The browser skips (ignores) this css style, but it is accessible to the Pompous player via Javascript.
+   Why not do it with "pure" CSS? In pure CSS this is done by placing "transform:the-initial-value-here" in another CSS class.
+   However, the browser reports it (in a Javascript call) like this: transform:matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 960, 1);
+   From it, the Pompous player cannot figure out which transform "function" is being transitioned, and from which start value.
+   
+   Anyhow, writing CSS this way is much more readable, because the intitial and end transition values are in one CSS class.
+   This is how the CSS standard should have been implemented in the first place.
+*/
+.zoom-to-1-1 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(-1000px) translateX(-960px) translateY(-540px);
+  transform:              translateZ(0px)     translateX(0px)    translateY(0px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-out-from-1-1 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(0px)     translateX(0px)    translateY(0px);
+  transform:              translateZ(-1000px) translateX(-960px) translateY(-540px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-to-1-2 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(-1000px) translateX(-960px)  translateY(-540px);
+  transform:              translateZ(0px)     translateX(-1920px) translateY(0px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-out-from-1-2 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(0px)     translateX(-1920px) translateY(0px);
+  transform:              translateZ(-1000px) translateX(-960px)  translateY(-540px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-to-2-1 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(-1000px) translateX(-960px) translateY(-540px);
+  transform:              translateZ(0px)     translateX(0px)    translateY(-1080px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-out-from-2-1 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(0px)     translateX(0px)     translateY(-1080px);
+  transform:              translateZ(-1000px) translateX(-960px)  translateY(-540px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-to-2-2 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(-1000px) translateX(-960px)  translateY(-540px);
+  transform:              translateZ(0px)     translateX(-1920px) translateY(-1080px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+
+.zoom-out-from-2-2 {
+  transition-property: transform;
+  --pp-transform-from: translateZ(0px)     translateX(-1920px) translateY(-1080px);
+  transform:              translateZ(-1000px) translateX(-960px)  translateY(-540px);
+  transition-timing-function: linear;
+  transition-duration: 2s;
+}
+</style>
+
+</head>
+<body>
+  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+    <!-- ================= Begin slideshow html ================= -->
+    
+    <!-- Quite simple and selfexplanatory: each CSS class will be applied at the specified delay from the play start:  -->
+    <div class="zoomed-out-initial initially-hidden"
+      data-classes="fade-in delay-0s, zoom-to-1-1 delay-2s, zoom-out-from-1-1 delay-6s, zoom-to-1-2 delay-10s, zoom-out-from-1-2 delay-14s, zoom-to-2-1 delay-18s, zoom-out-from-2-1 delay-22s, zoom-to-2-2 delay-26s, zoom-out-from-2-2 delay-30s"
+    >
+      <div class="bg-image-initial-1"></div>
+      <div class="bg-image-initial-2"></div>
+      <div class="bg-image-initial-3"></div>
+      <div class="bg-image-initial-4"></div>
+    </div>
+    <!-- ================= End slideshow html ================= -->
+    
+    <!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
+    <div class="pompous-video-like-splash pp-selector-video-like-splash">
+      <div class="pompous-loader-div">
+        <!--  'Loading' animated circle -->
+        <img src="../demo-resources/loader-5.gif">
+      </div>
+    </div>
+    <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
+        <div class="pompous-video-like-nav-inner">
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
+        </div>
+        
+        <div class="pompous-video-like-nav-filler">
+          <div class="pompous-progress-container pp-selector-progress-container">
+            <div class="pompous-progress-rail pp-selector-progress-rail"></div>
+            <div class="pompous-progress-track pp-selector-progress-track" style="width: 0%;"></div>
+            <div class="pompous-progress-handle pp-selector-progress-handle" tabindex="0" style="left: 0%;"></div>
+          </div>
+        </div>
+        
+        <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
+         
+        <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
+          <div class="pompous-nav-button pp-selector-share-button" onClick="pompousNavigation.toggleShowHideShareMenu(event)" >
+            <i class="fa fa-share-alt"></i>
+            <div class="pompous-share-menu pp-selector-share-menu" style="display:none;">
+                <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
+                <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
+                <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
+                <button class="button" onClick="pompousNavigation.shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+                <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
+                <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
+                <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
+                <button class="button" data-sharer="reddit"     data-title="" data-url=""><i class="fab fa-reddit-alien" style="color:red"></i>Share on Reddit</button>
+                <button class="button" data-sharer="flipboard"  data-title="" data-url=""><i class="fab fa-flipboard"  style="color:red"></i>Share on Flipboard</button>
+                <button class="button" data-sharer="hackernews" data-title="" data-url=""><i class="fab fa-hacker-news" style="color:orange"></i>Share on Hackernews</button>
+                <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
+                <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
+                <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
+                <button class="button" onClick="pompousNavigation.copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+            </div>
+          </div>          
+          <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+        </div>
+    </div>
+    <!-- ================= End video-like-001 skin html ================= -->
+  </div>
+</body>
+</html>

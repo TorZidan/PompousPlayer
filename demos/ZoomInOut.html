@@ -1,0 +1,173 @@
+<!-- 
+This simple presentation zooms-in an image for 10 seconds, and then zooms it out for 10 more seconds, to it's original position.
+
+Most of the file content is boilerplate css and html code for the video-like navigation bar.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Zoom-in, then zoom-out an image</title>
+
+<!-- These free fontawesome icons are used for the video-like navigation bar. -->
+<link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../skins/stage.css" />
+<link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+
+<!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
+<script type="text/javascript" src="../js/pp-dependencies.js"></script>
+
+<!-- Contains the Pompous Player JS code, minified -->
+<script type="text/javascript" src="../js/pp-player.min.js"></script>
+
+<!-- Contains the JS code for all Pompous Player "skins" -->
+<script type="text/javascript" src="../js/pp-skins.js"></script>
+
+<!-- Optionally, you can replace the three JS files above with one:  
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+-->
+
+<script>
+const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:true});
+const pompousOptions = {
+   autoStart: "true",
+   autoRestartAtEnd: false, 
+   startBlank: true,
+   designWidth: 1920,
+   designHeight: 1080,
+   stageId: "the-pompous-stage",
+   loadNImagesAhead: 5,
+   audio: "../demo-resources/Boom_de_Boom.mp3",
+   webfonts: {},
+   pompousEventNotifier: pompousNavigation,
+   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
+   afterInit: () => {updateStageScale(pompousPlayer)},
+   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+};
+const pompousPlayer = new PompousPlayer(pompousOptions);
+
+ppDocumentReady( () => {
+  pompousPlayer.getStageElement().focus();
+  
+  //Listen for touch events on mobile devices:
+  new PompousMobileTouchListener(
+    document,
+    (swipeDirection) => {
+      if(swipeDirection==="right") {
+        pompousPlayer.playPreviousAnimation();
+      } else if(swipeDirection==="left") {
+        pompousPlayer.playNextAnimation();
+      }
+    }
+  );
+});
+
+// On each window resize: resize the stage div element to fit the window/iframe width AND height:
+window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
+</script>
+<style>
+/* ================= Slideshow css begin ================= */
+
+/* The image is setup as a background image.
+   This image is public domain and can be reused for free. 
+*/
+.bg-image-initial
+{
+  background-image: url('../demo-resources/apple.jpg');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Zoom in from top left corner (aka as one of the Ken Burns effects) from scale 1 (100%) to scale 1.3 (130%), for 10 seconds.
+   
+   Note the line
+   --pp-transform-from: scale(1);
+   This is not standard CSS; this is how the Pompous player knows the initial transition value (at the start of the animation).
+   The browser skips (ignores) this css style, but it is accessible to the Pompous player via Javascript.
+   Why not do it with "pure" CSS? In pure CSS this is done by placing "transform:the-initial-value-here" in another CSS class.
+   However, the browser reports it (in a Javascript call) like this: transform:matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 960, 1);
+   From it, the Pompous player cannot figure out which transform "function" is being transitioned, and from which start value.
+   Anyhow, writing CSS this way is much more readable, because the intitial and end transition values are in one CSS class.
+*/
+.zoom-in-from-left-top-transition
+{
+  --pp-transform-from: scale(1);
+  transform: scale(1.3);
+  transition-property: transform;
+  transition-timing-function: linear;
+  transition-duration: 10s;
+  transform-origin: left top;
+}
+
+/* Zoom out from top left corner (aka as one of the Ken Burns effects) from scale 1.3 to scale 1, for 10 seconds. */
+.zoom-out-from-left-top-transition
+{
+  --pp-transform-from: scale(1.3);
+  transform: scale(1);
+  transition-property: transform;
+  transition-timing-function: linear;
+  transition-duration: 10s;
+  transform-origin: left top;
+}
+
+</style>
+
+</head>
+<body>
+  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+    <!-- ================= Begin slideshow html ================= -->
+    
+    <!-- Applies CSS class "bg-image-initial" at page load time (before starting playing), 
+    then applies CSS class "zoom-in-from-left-top-transition"  at play time 0, 
+    then applies CSS class "zoom-out-from-left-top-transition" at play time 10 seconds. -->
+    <div class="bg-image-initial" data-classes="zoom-in-from-left-top-transition delay-0s, zoom-out-from-left-top-transition delay-10s"></div>
+    <!-- ================= End slideshow html ================= -->
+    
+    <!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
+    <div class="pompous-video-like-splash pp-selector-video-like-splash">
+      <div class="pompous-loader-div">
+        <!--  'Loading' animated circle -->
+        <img src="../demo-resources/loader-5.gif">
+      </div>
+    </div>
+    <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
+        <div class="pompous-video-like-nav-inner">
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
+        </div>
+        
+        <div class="pompous-video-like-nav-filler">
+          <div class="pompous-progress-container pp-selector-progress-container">
+            <div class="pompous-progress-rail pp-selector-progress-rail"></div>
+            <div class="pompous-progress-track pp-selector-progress-track" style="width: 0%;"></div>
+            <div class="pompous-progress-handle pp-selector-progress-handle" tabindex="0" style="left: 0%;"></div>
+          </div>
+        </div>
+        
+        <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
+        <!-- We removed the usual "share" menu html from here, for brevity. -->
+        <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
+          <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+        </div>
+    </div>
+    <!-- ================= End video-like-001 skin html ================= -->
+  </div>
+</body>
+</html>

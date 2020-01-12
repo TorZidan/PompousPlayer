@@ -1,0 +1,165 @@
+<!-- 
+Rotates a DOM element in a circle by applying CSS translateX and translateY 
+transformations with custom "easing" functions.
+This is impossible to do with pure CSS (without the pompous player), 
+because of the limited choice of standard easing functions available in the web browser.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Rotate In Circle Demo</title>
+
+<!-- These free fontawesome icons are used for the video-like navigation bar. -->
+<link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../skins/stage.css" />
+<link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+
+<!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
+<script type="text/javascript" src="../js/pp-dependencies.js"></script>
+
+<!-- Contains the Pompous Player JS code, minified -->
+<script type="text/javascript" src="../js/pp-player.min.js"></script>
+
+<!-- Contains the JS code for all Pompous Player "skins" -->
+<script type="text/javascript" src="../js/pp-skins.js"></script>
+
+<!-- Optionally, you can replace the three JS files above with one:  
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+-->
+
+<script>
+// The "transitionTimingFunctions" variable is defined in file pp-dependencies.js.
+// Here we "add" to it two new custom timing functions. The function names (e.g. sinOf2Pi)
+// can be used in the presentation CSS, like this: --pp-transition-timing-function: sinOf2Pi;
+transitionTimingFunctions["sinOf2Pi"] = (t) => {return Math.sin(t*2*Math.PI);}
+transitionTimingFunctions["cosOf2Pi"] = (t) => {return Math.cos(t*2*Math.PI);}
+  
+const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:true});
+const pompousOptions = {
+   autoStart: "true",
+   autoRestartAtEnd: true,
+   designWidth: 1920,
+   designHeight: 1080,
+   fitWidthsUpTo: 5000,
+   stageId: "the-pompous-stage",
+   loadNImagesAhead: 5,
+   autoStartAudioMuted: true,
+   audio: "",
+   webfonts: {},
+   pompousEventNotifier: pompousNavigation,
+   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
+   afterInit: () => {updateStageScale(pompousPlayer)},
+   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+};
+const pompousPlayer = new PompousPlayer(pompousOptions);
+
+// On each window resize: resize the stage div element to fit the window/iframe width AND height:
+window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
+</script>
+
+<style>
+
+.image-initial
+{
+  position: absolute;
+  left: 700px;
+  top: 480px;
+  width: auto;
+  height: auto;
+  padding: 10px 20px 10px 20px;
+  border-color: #a69595;
+  border-radius: 10px;
+  border-style: solid;
+}
+
+.initially-hidden
+{
+  visibility: hidden;
+  opacity: 0;
+}
+
+.show
+{
+  visibility: visible;
+  opacity: 1;
+}
+
+/**
+ * Applies a CSS linear transformation on both X and Y axis, for 3 seconds.
+ * If using  a "linear" easing, the DOM element would be moved diagonally;
+ * but we use special easing functions defined above (in the JS code section), 
+ * which cause the DOM element to rotate in a circle. 
+ * The circle's radius is 400-0 = 400px.
+ * Each of the translateX, translateY values are recaculated at each requestAnimationFrame() call
+ * (usually 60 times per second). 
+ * Each current value is calculated as so:
+ * currentVal = startVal + ((endVal-startVal)*transitionTimingFunction(animProgressMs/animDdurationMs));
+ * so for the translateX it will be:
+ * currentXval = 400*Math.cos((progressMs/animDdurationMs)*2*Math.PI);
+ * Note: the final value for "translateX" at the end of the animaton is 0px, not 400px. 
+ * This is different from all standard easing functions (e.g. "ease-in"), whch all have f(0)=0 and f(1)=1.
+ */
+.rotate
+{
+  transition-property: transform;
+  --pp-transition-timing-function: cosOf2Pi sinOf2Pi;
+  --pp-transform-from: translateX(0px)   translateY(0px);
+  --pp-transition-precision: 3;
+  transform:              translateX(400px) translateY(400px);
+  transition-property: transform;
+  transition-duration: 5s;
+}
+
+</style>
+
+</head>
+<body>
+  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+    <!-- ================= Begin slideshow html ================= -->
+    <!-- At time zero: show the div and also start rotating it: -->
+    <div class="image-initial initially-hidden" data-classes="show rotate delay-0s">
+      <img src="https://storage.googleapis.com/pompous-photos-static/images/pp_logo_38x60.gif">
+    </div>
+    <!-- ================= End slideshow html ================= -->
+
+    <!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
+    <div class="pompous-video-like-splash pp-selector-video-like-splash">
+      <div class="pompous-loader-div">
+        <!--  'Loading' animated circle -->
+        <img src="../demo-resources/loader-5.gif">
+      </div>
+    </div>
+    <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
+        <div class="pompous-video-like-nav-inner">
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
+        </div>
+        
+        <div class="pompous-video-like-nav-filler">
+          <div class="pompous-progress-container pp-selector-progress-container">
+            <div class="pompous-progress-rail pp-selector-progress-rail"></div>
+            <div class="pompous-progress-track pp-selector-progress-track" style="width: 0%;"></div>
+            <div class="pompous-progress-handle pp-selector-progress-handle" tabindex="0" style="left: 0%;"></div>
+          </div>
+        </div>
+        
+        <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
+         
+        <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
+          <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+        </div>
+    </div>
+    <!-- ================= End video-like-001 skin html ================= -->
+  </div>
+</body>
+</html>

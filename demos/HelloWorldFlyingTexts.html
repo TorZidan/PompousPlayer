@@ -1,0 +1,243 @@
+<!-- 
+Demonstrates moving texts with "velocity".
+We came up with these transformation values via common sense and trial-and-error. 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Hello world with flying texts</title>
+
+<!-- These free fontawesome icons are used for the video-like navigation bar. -->
+<link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../skins/stage.css" />
+<link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+
+<!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
+<script type="text/javascript" src="../js/pp-dependencies.js"></script>
+
+<!-- Contains the Pompous Player JS code, minified -->
+<script type="text/javascript" src="../js/pp-player.min.js"></script>
+
+<!-- Contains the JS code for all Pompous Player "skins" -->
+<script type="text/javascript" src="../js/pp-skins.js"></script>
+
+<!-- Optionally, you can replace the three JS files above with one:  
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+-->
+
+<script>
+const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:true});
+const pompousOptions = {
+   autoStart: "true",
+   autoRestartAtEnd: true,
+   startBlank: true,
+   designWidth: 1920,
+   designHeight: 1080,
+   stageId: "the-pompous-stage",
+   loadNImagesAhead: 5,
+   autoStartAudioMuted: true,
+   audio: "",
+   webfonts: {
+               "google": { 
+                 "families": ["Gorditas:400", ]
+               },
+             },
+   pompousEventNotifier: pompousNavigation,
+   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
+   afterInit: () => {updateStageScale(pompousPlayer)},
+   stageStyle: "background-color:black;",
+   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+};
+const pompousPlayer = new PompousPlayer(pompousOptions);
+
+ppDocumentReady( () => {
+  //Listen for touch/swipe events on mobile devices:
+  new PompousMobileTouchListener(
+    pompousPlayer.getStageElement(),
+    (swipeDirection) => {
+      if(swipeDirection==="right") {
+        pompousPlayer.playPreviousAnimation();
+      } else if(swipeDirection==="left") {
+        pompousPlayer.playNextAnimation();
+      }
+    }
+  );
+});
+
+// On each window resize: resize the stage div element to fit the window/iframe width AND height:
+window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
+</script>
+
+<style>
+
+.initially-hidden
+{
+  visibility: hidden;
+}
+
+.text1-initial
+{
+  position: absolute;
+  visibility: hidden;
+  top: 144px;
+  left: 400px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Gorditas';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 200px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: normal;
+  border-style: none;
+}
+
+.text2-initial
+{
+  position: absolute;
+  visibility: hidden;
+  top: 573px;
+  left: 402px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Gorditas';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 200px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: normal;
+  border-style: none;
+}
+
+.bounceInLeft
+{
+  visibility: visible;
+  transition-property: transform, opacity;
+  
+  --pp-opacity-from: 0;
+  --pp-opacity-60: 1;
+  opacity: 1;
+  
+  --pp-transform-from: translateX(-2000px);
+  --pp-transform-60:   translateX(25px);
+  --pp-transform-75:   translateX(-10px);
+  --pp-transform-90:   translateX(5px); 
+  transform:           translateX(0px);
+  --pp-transition-timing-function: easeOutCubic;
+  --pp-transition-precision: 3;
+  transition-duration: 1s;
+  --pp-delay: 0s;
+}
+
+.bounceOutRight
+{
+  transition-property: transform, opacity;
+  
+  --pp-opacity-from: 1;
+  --pp-opacity-20: 1;
+  opacity: 0;
+  
+  --pp-transform-from: translateX(0px);
+  --pp-transform-20:   translateX(-20px);  
+  transform:           translateX(2000px);
+  --pp-transition-timing-function: ease;
+  --pp-transition-precision: 3;
+  transition-duration: 1s;
+  --pp-delay: 2.5s;
+}
+
+.skewInLeft
+{
+  visibility: visible;
+  transition-property: transform, opacity;
+  
+  --pp-opacity-from: 0;
+  --pp-opacity-60: 1;
+  opacity: 1;
+  
+  --pp-transform-from: skewX(15deg)  translateX(-2000px);
+  --pp-transform-80:   skewX(0deg)   translateX(0px);  
+  --pp-transform-90:   skewX(-15deg) translateX(10px); 
+  transform:           skewX(0deg)   translateX(0px);
+  --pp-transition-timing-function: ease-in;
+  --pp-transition-precision: 3;
+  transition-duration: 1s;
+  --pp-delay: 0s;
+}
+
+.skewOutRight
+{
+  transition-property: transform, opacity;
+  
+  --pp-opacity-from: 1;
+  --pp-opacity-50: 1;
+  opacity: 0;
+  
+  --pp-transform-from: skewX(0deg)  translateX(0px);
+  --pp-transform-20:   skewX(10deg) translateX(0px);  
+  transform:           skewX(30deg) translateX(2000px);
+  --pp-transition-timing-function: ease;
+  --pp-transition-precision: 3;
+  transition-duration: 1s;
+  --pp-delay: 2.5s;
+}
+
+</style>
+
+</head>
+<body>
+  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+    <!-- ================= Begin slideshow html ================= -->
+    <div class="text1-initial" data-classes="bounceInLeft, bounceOutRight">Hello World</div>
+    <div class="text2-initial" data-classes="skewInLeft, skewOutRight">Hello World</div>
+    <!-- ================= End slideshow html ================= -->
+    
+    <!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
+    <div class="pompous-video-like-splash pp-selector-video-like-splash">
+      <div class="pompous-loader-div">
+        <!--  'Loading' animated circle -->
+        <img src="../demo-resources/loader-5.gif">
+      </div>
+    </div>
+    <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
+        <div class="pompous-video-like-nav-inner">
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
+        </div>
+        
+        <div class="pompous-video-like-nav-filler">
+          <div class="pompous-progress-container pp-selector-progress-container">
+            <div class="pompous-progress-rail pp-selector-progress-rail"></div>
+            <div class="pompous-progress-track pp-selector-progress-track" style="width: 0%;"></div>
+            <div class="pompous-progress-handle pp-selector-progress-handle" tabindex="0" style="left: 0%;"></div>
+          </div>
+        </div>
+        
+        <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
+         
+        <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
+          <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+        </div>
+    </div>
+    <!-- ================= End video-like-001 skin html ================= -->
+  </div>
+</body>
+</html>

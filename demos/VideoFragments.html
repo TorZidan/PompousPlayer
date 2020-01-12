@@ -1,0 +1,483 @@
+<!-- 
+In this example we "embedded" two short mp4 videos in the presentation.
+How it works:
+Each <video> is inside a parent <div> element which is an "actor" (has the data-classes="..." attribute).
+As soon as the CSS style display:visible is applied on the actor div (e.g. via data-classes="show"), the pompous player starts playing the video (and shows it).
+As soon as the CSS style display:hidden  is applied on the actor div (e.g. via data-classes="hide"), the pompous player stops playing the video (and hides it).
+
+Most of the file content is boilerplate css and html code for the video-like navigation bar.
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Demo of embedding html5 videos in the presentation</title>
+
+<!-- These free fontawesome icons are used for the video-like navigation bar. -->
+<link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../skins/stage.css" />
+<link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+
+<!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
+<script type="text/javascript" src="../js/pp-dependencies.js"></script>
+
+<!-- Contains the Pompous Player JS code, minified -->
+<script type="text/javascript" src="../js/pp-player.min.js"></script>
+
+<!-- Contains the JS code for all Pompous Player "skins" -->
+<script type="text/javascript" src="../js/pp-skins.js"></script>
+
+<!-- Optionally, you can replace the three JS files above with one:  
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+-->
+
+<script>
+const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:true});
+const pompousOptions = {
+   autoStart: "false",
+   autoRestartAtEnd: false, 
+   startBlank: true,
+   designWidth: 1920,
+   designHeight: 1080,
+   stageId: "the-pompous-stage",
+   loadNImagesAhead: 5,
+   autoStartAudioMuted: true,
+   audio: "https://pompous-photos-static.storage.googleapis.com/free-audio/JazzAndBlues/Boom_de_Boom.mp3",
+   webfonts: {
+     "google": { 
+       "families": ["Black And White Picture:400", ]
+     },
+   },
+   pompousEventNotifier: pompousNavigation,
+   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
+   afterInit: () => {updateStageScale(pompousPlayer)},
+   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+};
+const pompousPlayer = new PompousPlayer(pompousOptions);
+
+ppDocumentReady( () => {
+  pompousPlayer.getStageElement().focus();
+  
+  //Listen for touch events on mobile devices:
+  new PompousMobileTouchListener(
+    document,
+    (swipeDirection) => {
+      if(swipeDirection==="right") {
+        pompousPlayer.playPreviousAnimation();
+      } else if(swipeDirection==="left") {
+        pompousPlayer.playNextAnimation();
+      }
+    }
+  );
+});
+
+// On each window resize: resize the stage div element to fit the window/iframe width AND height:
+window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
+</script>
+
+<style>
+/* ================= Slideshow css begin ================= */
+
+/* Sets the visibility to hidden, opacity to 0 */
+.initially-hidden
+{
+  visibility: hidden;
+  opacity: 0;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.show {
+  visibility: visible;
+}
+
+.bg-image-initial-3
+{
+  background-image: url('https://lh3.googleusercontent.com/QbMXyERCmWvjiGc8j-zdlDn3RPsy31W7D-XOv9Sl0z__wGiBXWN2Zp2o7KZmJqSYPmcU36YLUYhwYd37OJBircx0FA=s1920');
+  background-size: auto 1080px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Slowly fades-in the html element, by changing it's opacity from 0 to 1. */
+.fade-in-solo-3
+{
+  visibility: visible;
+  --pp-opacity-from: 0;
+  opacity: 1;
+  transition-property: opacity;
+  transition-timing-function: linear;
+  transition-duration: 1s;
+}
+
+/* Slides-out a bg image from its resting position to the left, to outside of the screen. */
+.slide-out-to-left-3
+{
+  --pp-transform-from: translateX(0%);
+  transform: translateX(-100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+.text-initial-7 {
+  position: absolute;
+  visibility: hidden;
+  opacity: 0;
+  top: 100px;
+  left: 200px;
+  width: auto;
+  height: auto;
+}
+
+.static-text-1 {
+  background-color: rgba(115, 163, 28, 0.55);
+  padding: 0px 20px 0px 20px;
+  font-family: 'Black And White Picture';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 188px;
+  text-align: left;
+  color: #ffa500;
+  white-space: pre;
+  word-break: break-word;
+  line-height: normal;
+  border-radius: 21px;
+  border-style: none;
+}
+
+.static-text-3 {
+  position: absolute;
+  visibility: visible;
+  opacity: 1;
+  top: 100px;
+  left: 100px;
+  width: auto;
+  height: auto;
+  background-color: rgba(115, 163, 28, 0.55);
+  padding: 0px 20px 0px 20px;
+  font-family: 'Black And White Picture';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 188px;
+  text-align: left;
+  color: #ffa500;
+  white-space: pre;
+  word-break: break-word;
+  line-height: normal;
+  border-radius: 21px;
+  border-style: none;
+}
+
+.static-text-2 {
+  position: absolute;
+  visibility: visible;
+  opacity: 1;
+  top: 750px;
+  left: 500px;
+  width: auto;
+  height: auto;
+  background-color: rgba(115, 163, 28, 0.55);
+  padding: 0px 20px 0px 20px;
+  font-family: 'Black And White Picture';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 188px;
+  text-align: left;
+  color: #ffa500;
+  white-space: pre;
+  word-break: break-word;
+  line-height: normal;
+  border-radius: 21px;
+  border-style: none;
+}
+
+/* Shows the text outer div. */
+.text-show-outer-div-7
+{
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Slowly fades-out the text, by changing it's opacity from 1 to 0. */
+.text-fade-out-outer-div-7
+{
+  --pp-opacity-from: 1;
+  opacity: 0;
+  transition-property: opacity;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/*  */
+.bounceInRight-7
+{
+  transition-property: transform;
+  --pp-transform-from: translateX(2000px);
+  transform: translateX(0px);
+  --pp-transition-timing-function: easeOutBack;
+  --pp-transition-precision: 4;
+  transition-duration: 0.9s;
+}
+
+/*  */
+.bounceOut
+{
+  transition-property: transform;
+  --pp-transform-from: translateX(0px) scaleX(1) scaleY(1) scaleZ(1);
+  transform: translateX(0px) scaleX(0) scaleY(0) scaleZ(0);
+  --pp-transition-timing-function: easeInBack;
+  --pp-transition-precision: 4;
+  transition-duration: 1s;
+}
+
+/* ... */
+.bg-image-initial-10
+{
+  background-image: url('https://lh3.googleusercontent.com/lkl_5LPJC5IZHv85yDnTnsiSsc3hv7Kvat8t6BrvYs3D1Y4CCGwknVgxqkZb55NSoIkLL1hnfhZ3V6nLQ66-Zt7Y_Q=s1280');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Prepares a bg image to slide-in from right to left, by placing it outside of the stage, to the right */
+.slide-in-from-right-initial
+{
+  transform: translateX(100%);
+  left: 0;
+  top: 0;
+}
+
+/* Sets the visibility to visible */
+.make-visible
+{
+  visibility: visible;
+  opacity: 1;
+}
+
+/* Slides-in a bg image from right to left */
+.slide-in-from-right-10
+{
+  --pp-transform-from: translateX(100%) translateX(0%);
+  transform: translateX(100%) translateX(-100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/* Slides-out a bg image from its resting position to the right, to outside of the screen. */
+.slide-out-to-right-10
+{
+  --pp-transform-from: translateX(100%) translateX(-100%) translateX(0%);
+  transform: translateX(100%) translateX(-100%) translateX(100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/* ... */
+.bg-image-initial-13
+{
+  background-image: url('https://lh3.googleusercontent.com/-K09QBoA7PXLFau5HITr-q_g6Kdljzut50IPFMwP1oRQPuQg7BjL2w6L2gcO4z9Kq5iIvdxJPO-CFNre0B2qhVVmWg=s1920');
+  background-size: auto 1080px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Prepares a bg image to slide-in from left to right, by placing it outside of the stage, to the left */
+.slide-in-from-left-initial
+{
+  transform: translateX(-100%);
+  top: 0;
+}
+
+/* Slides-in a bg image from left to right */
+.slide-in-from-left-13
+{
+  --pp-transform-from: translateX(-100%) translateX(0%);
+  transform: translateX(-100%) translateX(100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/* Slides-out a bg image from its resting position to the bottom, to outside of the screen. */
+.slide-out-to-bottom-13
+{
+  --pp-transform-from: translateX(-100%) translateX(100%) translateY(0%);
+  transform: translateX(-100%) translateX(100%) translateY(100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/* Prepares a bg image to slide-in from top to bottom, by placing it outside of the stage, above it */
+.slide-in-from-top-initial
+{
+  left: 0;
+  top: 0;
+  transform: translateY(-100%);
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Slides-in a bg image from top to bottom */
+.slide-in-from-top-16
+{
+  --pp-transform-from: translateY(-100%) translateY(0%);
+  transform: translateY(-100%) translateY(100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/* Slides-out a bg image from its resting position to the top, to outside of the screen. */
+.slide-out-to-top-16
+{
+  --pp-transform-from: translateY(-100%) translateY(100%) translateY(0%);
+  transform: translateY(-100%) translateY(100%) translateY(-100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+/* ... */
+.bg-image-initial-18
+{
+  background-image: url('https://lh3.googleusercontent.com/Z5odfZuTmhpYa7k5BX6g06ffsH95-1jNaysfWd7qOZSPacz4_FAtFzqNMsW1yN33oaHhFGs8mO1BewcVg3NzUuEC=s1920');
+  background-size: auto 1080px;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Prepares a bg image to slide-in from bottom to top, by placing it outside of the stage, below it */
+.slide-in-from-bottom-initial
+{
+  left: 0;
+  top: 0;
+  transform: translateY(100%);
+}
+
+/* Slides-in a bg image from bottom to top */
+.slide-in-from-bottom-18
+{
+  --pp-transform-from: translateY(100%) translateY(0%);
+  transform: translateY(100%) translateY(-100%);
+  transition-property: transform;
+  transition-timing-function: ease-in;
+  transition-duration: 1s;
+}
+
+</style>
+
+</head>
+<body>
+  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+    <!-- ================= Begin slideshow html ================= -->
+    <div class="initially-hidden" data-classes="fade-in-solo-3 skippable delay-0.1s"><div class="bg-image-initial-3" data-classes="slide-out-to-left-3 skippable delay-6s"></div></div>
+    
+    <!-- This text is "detached" from the bg image above (not inside the div above), just because we can. The "skippable" class name below means that when clicking on << , >> buttons we'll "skip" these play positions -->
+    <div class="text-initial-7" data-classes="text-show-outer-div-7 skippable delay-1s">
+      <div class="static-text-1" data-classes="bounceInRight-7 skippable delay-1s, bounceOut skippable delay-5s">Welcome to
+   Yellowstone
+       National Park  </div>
+    </div>
+    
+    <div class="initially-hidden" data-classes="make-visible delay-6s">
+      <div class="slide-in-from-right-initial" data-classes="show slide-in-from-right-10 skippable delay-6s, hide skippable delay-13s">
+        <video class="video-element" id="video1" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone2.mp4"></video>
+        <div class="static-text-2">The Old Faithful</div>
+      </div>
+    </div>
+    
+    <div class="initially-hidden" data-classes="make-visible delay-12s">
+      <div class="bg-image-initial-13 slide-in-from-left-initial"data-classes="slide-in-from-left-13 skippable delay-12s">
+        <div class="static-text-3">Sky or Earth?</div>
+      </div>
+    </div>
+    
+    <div class="initially-hidden" data-classes="make-visible delay-18s">
+      <div class="slide-in-from-top-initial" data-classes="show slide-in-from-top-16 skippable delay-18s, hide skippable delay-30s">
+        <!-- The #t=3 in the URL below can be used to start playing the video from offset 3 seconds vs. from the default 0 seconds: -->
+        <video class="video-element" id="video2" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone6.mp4#t=3"></video>
+        <div class="static-text-2">Fountain Paint Pot</div>
+      </div>
+    </div>
+    
+    <div class="initially-hidden" data-classes="make-visible delay-29s">
+      <div class="bg-image-initial-18 slide-in-from-bottom-initial" data-classes="slide-in-from-bottom-18 skippable delay-29s">
+        <div class="static-text-3" data-classes="bounceOut skippable delay-33s">The End</div>
+      </div>
+    </div>
+    <!-- ================= End slideshow html ================= -->
+    
+    <!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
+    <div class="pompous-video-like-splash pp-selector-video-like-splash">
+      <div class="pompous-loader-div">
+        <!--  'Loading' animated circle -->
+        <img src="../demo-resources/loader-5.gif">
+      </div>
+    </div>
+    <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
+        <div class="pompous-video-like-nav-inner">
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
+        </div>
+        
+        <div class="pompous-video-like-nav-filler">
+          <div class="pompous-progress-container pp-selector-progress-container">
+            <div class="pompous-progress-rail pp-selector-progress-rail"></div>
+            <div class="pompous-progress-track pp-selector-progress-track" style="width: 0%;"></div>
+            <div class="pompous-progress-handle pp-selector-progress-handle" tabindex="0" style="left: 0%;"></div>
+          </div>
+        </div>
+        
+        <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
+        <!-- We removed the usual "share" menu html from here, for brevity. -->
+        <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
+          <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+        </div>
+    </div>
+    <!-- ================= End video-like-001 skin html ================= -->
+  </div>
+</body>
+</html>

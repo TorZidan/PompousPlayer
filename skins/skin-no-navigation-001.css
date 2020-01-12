@@ -1,0 +1,28 @@
+/* no-navigation-001 skin start */
+.pompous-no-navigation-splash {
+  display:block;
+  position:absolute;
+  visibility: visible;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  left:0;
+  top:0;
+  background: black;
+  z-index: 2147483646;
+}
+.pompous-no-navigation-audio-button {
+	display:block;
+	position: absolute;
+	opacity: 0;
+	top: 0; 
+	left: 0;
+  width: 100px; 
+  height: 100px;
+}
+.pompous-no-navigation-current-state-div {
+	display:block;
+  position: absolute;
+	visibility: hidden;
+}
+/* no-navigation-001 skin end */

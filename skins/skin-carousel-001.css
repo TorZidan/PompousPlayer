@@ -1,0 +1,125 @@
+/* carousel-001 skin start */
+.pompous-carousel-001-splash {
+  display:block;
+  position:absolute;
+  visibility: visible;
+  user-select: none;
+  width: 100%;
+  height: 100%;
+  left:0;
+  top:0;
+  background: black;
+  z-index: 2147483646;
+}
+.pompous-carousel-001-button {
+  position:absolute;
+  cursor:pointer;
+  user-select: none;
+}
+.pompous-carousel-001:hover circle {
+  stroke-width:40;
+   cursor:pointer;
+}
+.pompous-carousel-001-top-buttons {
+  top: 10px; 
+  width: 50px; 
+  height: 50px;
+}
+.pompous-carousel-001-prev-animation-button {
+  top: 50%;
+  width: 50px; 
+  height: 50px;
+  left: 30px;
+  margin-top: -25px;
+}
+.pompous-carousel-001-next-animation-button {
+  top: 50%;
+  width: 50px; 
+  height: 50px;
+  right: 30px;
+  margin-top: -25px;
+}
+.pompous-carousel-001-play-pause-resume-button {
+  right:30px;
+}
+.pompous-carousel-001-full-screen-button {
+  right:90px;
+}
+.pompous-carousel-001-audio-on-off-button {
+  right:150px;
+}
+.pompous-carousel-001-share-button {
+  right:210px;
+}
+@media (max-width:250px) {
+   .pompous-top-buttons {
+    top: 10px; 
+    width: 150px; 
+    height: 150px;
+  }
+  .pompous-carousel-001-share-button {
+    right:630px;
+  }
+  .pompous-carousel-001-play-pause-resume-button {
+     right:90px;
+  }
+  .pompous-carousel-001-full-screen-button {
+      right:270px;
+  }
+  .pompous-carousel-001-audio-on-off-button{
+      right:450px;
+  }
+  .pompous-carousel-001-prev-animation-button {
+    top: 50%;
+    width: 150px; 
+    height: 150px;
+    left: 90px;
+    margin-top: -75px;
+  }
+  .pompous-carousel-001-next-animation-button {
+    top: 50%;
+    width: 150px; 
+    height: 150px;
+    right: 90px;
+    margin-top: -75px;
+  }
+}
+.pompous-share-menu {
+  position: relative;
+  background-color: #efefef;
+  border:1px solid #000;
+  box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+  right:40px;
+  width:222px;
+}
+.pompous-share-menu .button {
+  background-color:#efefef;
+  text-align:left;
+  white-space: nowrap; 
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0;
+  border:0;
+  width:220px;
+  vertical-align: middle;
+  cursor:pointer;
+}
+.pompous-share-menu .button:hover {
+  background-color:#ddd;
+}
+.pompous-share-menu .button i {
+   margin:0 .125em 0 0;
+   padding:0;
+   font-size:1.5em;
+   width:30px;
+   background-collor:#ddd;
+}
+.pompous-carousel-001-loader-div {
+  position:absolute; 
+  left: 50%; 
+  top:50%; 
+  width: 200px; 
+  height: 200px; 
+  margin-left:-100px; 
+  margin-top:-100px;
+}
+/* carousel-001 skin end */

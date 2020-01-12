@@ -1,0 +1,462 @@
+<!-- 
+Demonstrates that the player "skin" is separate from the presentation, and can be swapped at any time, without interrupting the play.
+The CSS and HTML of 3 skins is included in the page; we switch the skins via the drop-down on top of the page, by showing/hiding the skin html elements.
+For convenience, we use the tiny jquery-like library Zepto, from the included file pp-dependencies.js.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Changing Clothes</title>
+
+<!-- These free fontawesome icons are used for the video-like navigation bar. -->
+<link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
+<link rel="stylesheet" href="../skins/stage.css" />
+<link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+<link rel="stylesheet" href="../skins/skin-carousel-001.css" />
+<link rel="stylesheet" href="../skins/skin-no-navigation-001.css" />
+
+<!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
+<script type="text/javascript" src="../js/pp-dependencies.js"></script>
+
+<!-- Contains the Pompous Player JS code, minified -->
+<script type="text/javascript" src="../js/pp-player.min.js"></script>
+
+<!-- Contains the JS code for all Pompous Player "skins" -->
+<script type="text/javascript" src="../js/pp-skins.js"></script>
+
+<!-- Optionally, you can replace the three JS files above with one:  
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+-->
+
+<script>
+// Dispatches navigation commands from the player to each navigation object in the pompousNavigationObjectsArray:
+class PompousNavigationDispatcher {
+  constructor(pompousNavigationObjectsArray) {
+    this.pompousNavigationObjectsArray = pompousNavigationObjectsArray;
+  } // end constructor  
+  initStarted(presentationOptions, thePompousPlayer) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.initStarted(presentationOptions, thePompousPlayer);
+    }
+  }
+  initFinished(presentationOptions, totalPlayDurationMs) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.initFinished(presentationOptions, totalPlayDurationMs);
+    }
+  }
+  imageLoaded(image, totalImagesToBeLoaded, message) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.imageLoaded(image, totalImagesToBeLoaded, message);
+    }
+  }
+  waitingForVideoToPlay() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.waitingForVideoToPlay();
+    }
+  }
+  videoPlayStarted() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      videoPlayStarted();
+    }
+  }
+  videoPlayPaused() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.videoPlayPaused();
+    }
+  }
+  videoPlayErrored() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.videoPlayErrored();
+    }
+  }
+  progressUpdate(progressText, playDurationMs, totalPlayDurationMs, isInstant) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.progressUpdate(progressText, playDurationMs, totalPlayDurationMs, isInstant);
+    }
+  }
+  onPrevOrNextAnimationChange(playing, currentAnimationGroupIndex, totalAnimationGroups, displayIndex) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.onPrevOrNextAnimationChange(playing, currentAnimationGroupIndex, totalAnimationGroups, displayIndex);
+    }
+  }
+  reset(hasAudio, isAudioMuted) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.reset(hasAudio, isAudioMuted);
+    }
+  }
+  playStarted(playDurationMs, totalPlayDurationMs) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.playStarted(playDurationMs, totalPlayDurationMs);
+    }
+  }
+  playPaused(playDurationMs, totalPlayDurationMs) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.playPaused(playDurationMs, totalPlayDurationMs);
+    }
+  }
+  performanceFinished() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.performanceFinished();
+    }
+  }  
+  audioMutedUnmuted(isNowMuted) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.audioMutedUnmuted(isNowMuted);
+    }
+  }
+  fullScreenChanged(isNowInFulScreen) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.fullScreenChanged(isNowInFulScreen);
+    }
+  }
+  toggleShowHideShareMenu(event) {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.toggleShowHideShareMenu(event);
+    }
+  }
+  copyPresentationUrlToClipboard() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.copyPresentationUrlToClipboard();
+    }
+  }
+  shareViaGmail() {
+    for(const obj of this.pompousNavigationObjectsArray) {
+      obj.shareViaGmail();
+    }
+  }
+} // end of PompousNavigationDispatcher
+
+//We have one navigation object per "skin"; Even if a skin is currently "hidden", the player still dispatches notifications to it. 
+const pompousVideoLikeNavigation  = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false});
+const pompousCarouselNavigation   = new PompousCarouselNavigation({stageId:"the-pompous-stage", hideShareButton:false});
+const pompousNoNavigation         = new PompousBlankNavigation({stageId:"the-pompous-stage"});
+const pompousNavigationDispatcher = new PompousNavigationDispatcher([pompousVideoLikeNavigation, pompousCarouselNavigation, pompousNoNavigation]);
+
+const pompousOptions = {
+   autoStart: "true",
+   autoRestartAtEnd: false, 
+   startBlank: true,
+   designWidth: 1920,
+   designHeight: 1080,
+   stageId: "the-pompous-stage",
+   loadNImagesAhead: 5,
+   audio: "../demo-resources/Boom_de_Boom.mp3",
+   webfonts: {},
+   pompousEventNotifier: pompousNavigationDispatcher,
+   // Upon page load, resize the stage div element to fit the available width:
+   afterInit: () => {updateStageScaleToFitWidth(pompousPlayer)},
+   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+};
+const pompousPlayer = new PompousPlayer(pompousOptions);
+
+function updateStageScaleToFitWidth(pompousPlayer) {
+  if(pompousPlayer.isInFullScreen()) {
+    // Do nothing in full screen.It's handled by the player code.
+    return;
+  }
+  
+  const $theStageContainerDiv = $("#the-stage-container-div");
+  const width = $theStageContainerDiv.width();
+  const options = pompousPlayer.getOptions();
+  const newScale = width / options['designWidth'];  
+  console.warn("Scaling stage to "+newScale);
+  pompousPlayer.scaleStage(newScale);
+}
+ 
+// On each window resize: resize the stage div element to fit the available width:
+window.addEventListener("resize", () => {updateStageScaleToFitWidth(pompousPlayer)});
+
+ppDocumentReady( () => {
+  changeSkin("Video");
+});
+
+function changeSkin(skinName) {
+  switch(skinName) {
+    case "Video":
+    default:
+      $(".pompous-video-like-navigation").css("display", "flex");    
+      $(".pompous-carousel-001-button").css("display", "none");
+      break;
+    case "Carousel":
+      $(".pompous-video-like-navigation").css("display", "none");
+      $(".pompous-carousel-001-button").css("display", "block");
+      break;
+    case "None":
+      $(".pompous-video-like-navigation").css("display", "none");
+      $(".pompous-carousel-001-button").css("display", "none");
+      break;
+  }
+}
+</script>
+<style>
+/* ================= Slideshow css begin ================= */
+
+/* The image is setup as a background image.
+   This image is public domain and can be reused for free. 
+*/
+.bg-image-initial
+{
+  background-image: url('../demo-resources/apple.jpg');
+  background-size: 1920px auto;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  position: absolute;
+}
+
+/* Zoom in from top left corner (aka as one of the Ken Burns effects) from scale 1 (100%) to scale 1.3 (130%), for 10 seconds.
+   
+   Note the line
+   --pp-transform-from: scale(1);
+   This is not standard CSS; this is how the Pompous player knows the initial transition value (at the start of the animation).
+   The browser skips (ignores) this css style, but it is accessible to the Pompous player via Javascript.
+   Why not do it with "pure" CSS? In pure CSS this is done by placing "transform:the-initial-value-here" in another CSS class.
+   However, the browser reports it (in a Javascript call) like this: transform:matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 960, 1);
+   From it, the Pompous player cannot figure out which transform "function" is being transitioned, and from which start value.
+   Anyhow, writing CSS this way is much more readable, because the intitial and end transition values are in one CSS class.
+*/
+.zoom-in-from-left-top-transition
+{
+  --pp-transform-from: scale(1);
+  transform: scale(1.3);
+  transition-property: transform;
+  transition-timing-function: linear;
+  transition-duration: 10s;
+  transform-origin: left top;
+}
+
+/* Zoom out from top left corner (aka as one of the Ken Burns effects) from scale 1.3 to scale 1, for 10 seconds. */
+.zoom-out-from-left-top-transition
+{
+  --pp-transform-from: scale(1.3);
+  transform: scale(1);
+  transition-property: transform;
+  transition-timing-function: linear;
+  transition-duration: 10s;
+  transform-origin: left top;
+}
+
+</style>
+
+</head>
+<body>
+  <div style="width:100%; height:50px; background-color: green;">
+    <div style="position:relative; left: 50%;  top:50%;  width: 100%;  height: 50px;  margin-left:-200px;  margin-top:-20px;">
+      Choose player skin: 
+      <select onchange="changeSkin(this.value)">
+        <option value="Video" selected>Like a video</option>
+        <option value="Carousel">Carousel</option>
+        <option value="None">None</option>
+      </select>
+    </div>
+  </div>
+  <div id="the-stage-container-div" style="width:100%; height:0; padding-bottom:56.25%; position:relative; margin:0 0; background-color:black;">
+    <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+      <!-- ================= Begin slideshow html ================= -->
+      
+      <!-- Applies CSS class "bg-image-initial" at page load time (before starting playing), 
+      then applies CSS class "zoom-in-from-left-top-transition"  at play time 0, 
+      then applies CSS class "zoom-out-from-left-top-transition" at play time 10 seconds. -->
+      <div class="bg-image-initial" data-classes="zoom-in-from-left-top-transition delay-0s, zoom-out-from-left-top-transition delay-10s"></div>
+      <!-- ================= End slideshow html ================= -->
+      
+      <!-- ================= Begin video-like-001 skin boilerplate html code ================= -->
+      <div class="pompous-video-like-splash pp-selector-video-like-splash">
+        <div class="pompous-loader-div">
+          <!--  'Loading' animated circle -->
+          <img src="../demo-resources/loader-5.gif">
+        </div>
+      </div>
+      <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
+          <div class="pompous-video-like-nav-inner">
+            <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+            <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+            <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+            <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+            <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+            <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
+          </div>
+          
+          <div class="pompous-video-like-nav-filler">
+            <div class="pompous-progress-container pp-selector-progress-container">
+              <div class="pompous-progress-rail pp-selector-progress-rail"></div>
+              <div class="pompous-progress-track pp-selector-progress-track" style="width: 0%;"></div>
+              <div class="pompous-progress-handle pp-selector-progress-handle" tabindex="0" style="left: 0%;"></div>
+            </div>
+          </div>
+          
+          <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
+           
+          <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
+            <div class="pompous-nav-button pp-selector-share-button" onClick="pompousVideoLikeNavigation.toggleShowHideShareMenu(event)" >
+              <i class="fa fa-share-alt"></i>
+              <div class="pompous-share-menu pp-selector-share-menu" style="display:none;">
+                  <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
+                  <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
+                  <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
+                  <button class="button" onClick="pompousVideoLikeNavigation.shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+                  <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
+                  <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
+                  <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
+                  <button class="button" data-sharer="reddit"     data-title="" data-url=""><i class="fab fa-reddit-alien" style="color:red"></i>Share on Reddit</button>
+                  <button class="button" data-sharer="flipboard"  data-title="" data-url=""><i class="fab fa-flipboard"  style="color:red"></i>Share on Flipboard</button>
+                  <button class="button" data-sharer="hackernews" data-title="" data-url=""><i class="fab fa-hacker-news" style="color:orange"></i>Share on Hackernews</button>
+                  <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
+                  <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
+                  <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
+                  <button class="button" onClick="pompousVideoLikeNavigation.copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+              </div>
+            </div>          
+            <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+          </div>
+      </div>
+      <!-- ================= End video-like-001 skin html ================= -->
+      
+      <!-- ================= Begin carousel-001 skin boilerplate html code ================= -->
+      <div class="pompous-carousel-001-splash pp-selector-carousel-splash">
+        <div class="pompous-carousel-001-loader-div">
+          <!--  'Loading' animated circle -->
+          <img src="https://storage.googleapis.com/pompous-photos-static/images/loader-5.gif">
+        </div>
+      </div>
+      <!-- Arrow Left -->
+      <div class="pompous-carousel-001-button pompous-carousel-001-prev-animation-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimationBackward()">
+        <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="230"  stroke-width="30" fill=" rgba(0, 0, 0, 0.4)" />
+          <path stroke-width="15" d="M305.312,148.688c-6.25-6.25-16.375-6.25-22.625,0l-96,96c-6.25,6.25-6.25,16.375,0,22.625l96,96
+            C285.812,366.438,289.906,368,294,368s8.188-1.562,11.312-4.688c6.25-6.25,6.25-16.375,0-22.625L220.625,256l84.688-84.688
+            C311.562,165.062,311.562,154.938,305.312,148.688z"/>
+        </svg>
+      </div>
+            
+      
+      <!-- Arrow Right -->
+      <div class="pompous-carousel-001-button pompous-carousel-001-next-animation-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimationForward()" >
+        <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
+          <path stroke-width="15" d="M212.688,363.312c6.25,6.25,16.375,6.25,22.625,0l96-96c6.25-6.25,6.25-16.375,0-22.625l-96-96
+        C232.188,145.562,228.094,144,224,144s-8.188,1.562-11.312,4.688c-6.25,6.25-6.25,16.375,0,22.625L297.375,256l-84.688,84.688
+        C206.438,346.938,206.438,357.062,212.688,363.312z"/>
+        </svg>
+      </div>
+      
+      <!-- Share -->
+      <div class="pompous-carousel-001-button pompous-carousel-001-share-button pp-selector-share-button pompous-carousel-001-top-buttons" onClick="pompousCarouselNavigation.toggleShowHideShareMenu(event)" >
+        <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
+          <path d="M342.906,210.25c22.733,0,41.172-18.438,41.172-41.172c0-22.719-18.438-41.156-41.172-41.156
+            c-22.734,0-41.172,18.438-41.172,41.156c0,1.781,0.312,3.438,0.516,5.156l-104.328,52.438
+            c-7.438-7.312-17.594-11.844-28.844-11.844c-22.719,0-41.156,18.438-41.156,41.156c0,22.734,18.438,41.188,41.156,41.188
+            c11.484,0,21.859-4.734,29.328-12.328l103.891,52.594c-0.25,1.812-0.562,3.595-0.562,5.453c0,22.75,18.438,41.188,41.173,41.188
+            c22.733,0,41.172-18.438,41.172-41.188c0-22.703-18.438-41.172-41.172-41.172c-11.609,0-22.062,4.875-29.531,12.609l-103.719-52.5
+            c0.266-1.922,0.594-3.828,0.594-5.844c0-2.219-0.328-4.391-0.656-6.547l103.562-52.016
+            C320.656,205.281,331.188,210.25,342.906,210.25z"/>
+        </svg>
+  
+        <div class="pompous-share-menu pp-selector-share-menu" style="display:none;">
+          <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
+          <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
+          <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
+          <button class="button" onClick="pompousCarouselNavigation.shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+          <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
+          <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
+          <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
+          <button class="button" data-sharer="reddit"     data-title="" data-url=""><i class="fab fa-reddit-alien" style="color:red"></i>Share on Reddit</button>
+          <button class="button" data-sharer="flipboard"  data-title="" data-url=""><i class="fab fa-flipboard"  style="color:red"></i>Share on Flipboard</button>
+          <button class="button" data-sharer="hackernews" data-title="" data-url=""><i class="fab fa-hacker-news" style="color:orange"></i>Share on Hackernews</button>
+          <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
+          <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
+          <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
+          <button class="button" onClick="pompousCarouselNavigation.copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+        </div>
+      </div>
+       
+      <!-- Play/pause/rewind -->
+      <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onClick="pompousPlayer.togglePlayPauseResumeRewind(true)">
+        <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
+          <polygon class="pp-selector-play" points="6622,6080 10142,8000 6622,9920" fill="white"></polygon>
+          <path class="pp-selector-play" d="M353.661,237.879l-154.174-89.594c-16.844-9.969-32.987-1.938-32.987,17.844v179.766c0,19.75,16.143,27.797,32.987,17.812 l152.956-89.578C369.348,264.16,370.552,247.848,353.661,237.879z"/>
+          <g class="pp-selector-pause" style="display:none" transform="translate(16,20)">
+            <path d="M201.654,127.525h-31.9c-10.557,0-19.125,8.645-19.125,19.125v184.9c0,10.558,8.645,19.125,19.125,19.125h31.9
+              c10.557,0,19.125-8.645,19.125-19.125v-184.9C220.779,136.094,212.211,127.525,201.654,127.525z"/>
+            <path d="M308.448,127.525h-31.9c-10.558,0-19.125,8.645-19.125,19.125v184.9c0,10.558,8.645,19.125,19.125,19.125h31.9
+              c10.557,0,19.125-8.645,19.125-19.125v-184.9C327.573,136.094,318.929,127.525,308.448,127.525z"/>
+          </g>
+          <path class="pp-selector-rewind" style="display:none" stroke-width="12" d="M370.906,311.188L401.594,256h-19.188c-0.797-72.344-56.625-127.516-126.781-127.609
+      c-70.609-0.078-127.766,57.078-127.672,127.688c0.078,70.625,57.359,127.905,127.969,127.969
+      c39.875,0.095,75.406-18.125,98.797-46.625l-15.281-25.483c-17.938,27.016-48.641,44.75-83.562,44.703
+      c-55.469-0.031-100.484-45.048-100.531-100.531c-0.062-55.484,44.844-100.375,100.312-100.312
+      c55.219,0.094,99.078,45.781,99.547,100.203l-19.047-0.031L370.906,311.188z"/>
+        </svg>
+      </div>
+     
+      
+      <!--  Full Screen on/off -->
+      <div class="pompous-carousel-001-button pompous-carousel-001-full-screen-button pp-selector-full-screen-button pompous-carousel-001-top-buttons" onClick="pompousPlayer.toggleFullScreen()">
+        <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
+          <g class="pp-selector-full-screen-on" style="display: block;">
+            <polygon points="368,224 368,144 288,144 312,168 272,208 304,240 344,200"/>            
+            <polygon points="144,288 144,368 224,368 200,344 240,304 208,272 168,312"/>
+          </g>
+          <g class="pp-selector-full-screen-off" style="display: none;">
+            <polygon points="327.984,215.984 367.984,176 335.984,143.984 296,183.984 272,159.984 272,240 351.984,240"/>
+            <polygon points="183.984,296 143.984,336.016 175.984,368.016 215.984,328.016 240,352.016 240,272 159.984,272"/>
+          </g>
+        </svg>
+      </div>
+      
+      <!--  Audio on/off -->
+      <div class="pompous-carousel-001-button pompous-carousel-001-audio-on-off-button pp-selector-audio-on-off-button pompous-carousel-001-top-buttons" onClick="pompousPlayer.toggleAudioOnOff()" >
+        <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+          <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
+          <g class="pp-selector-audio-on" style="display: block;">
+            <path  transform="translate(-30,30) scale(0.9, 0.9)" d="M331.141,148.297L232.156,208H168c-4.422,0-8,3.578-8,8v80c0,4.422,3.578,8,8,8h67.5l95.641,59.719
+             c17.031,9.969,20.859,1.938,20.859-17.844V166.109C352,146.359,348.172,138.312,331.141,148.297z"/>
+            <g transform="translate(50,30) scale(0.9, 0.9)">
+              <path d="M304.875,202.688l-18.016,13.531C299.609,224.844,308,239.438,308,256c0,16.562-8.391,31.141-21.141,39.766l18.016,13.531
+             C320.094,296.453,330,277.453,330,256C330,234.531,320.094,215.531,304.875,202.688z"/>
+              <path d="M348.844,169.594l-17.75,13.344C350.125,201.469,362,227.344,362,256s-11.875,54.531-30.906,73.047l17.75,13.359
+             C370.562,320.047,384,289.625,384,256S370.562,191.938,348.844,169.594z"/>
+            </g>
+          </g>
+          <g class="pp-selector-audio-off" style="display: none;">
+            <g transform="translate(0,30) scale(0.9, 0.9)">
+            <path style="fill:#fff" d="M380.766,365.172L146.844,131.234c-4.312-4.312-11.297-4.312-15.609,0s-4.312,11.266,0,15.594l233.938,233.938
+         c4.312,4.312,11.297,4.312,15.594,0C385.078,376.469,385.078,369.484,380.766,365.172z"/>         
+            <path style="fill:#fff" d="M352,325.094V166.109c0-19.75-3.828-27.797-20.859-17.812l-97.266,58.672L352,325.094z"/>
+            <path style="fill:#fff" d="M181.094,208H168c-4.422,0-8,3.578-8,8v80c0,4.422,3.578,8,8,8h67.5l95.641,59.719c3.892,2.281,7.031,3.5,9.656,3.984
+           L181.094,208z"/>         
+            </g>
+          </g>
+        </svg>
+      </div>
+      <!-- ================= End carousel-001 skin html ================= -->
+      
+      <!-- ================= Begin no-navigation-001 skin boilerplate html code ================= -->
+      <div class="pompous-no-navigation-splash pp-selector-no-navigation-splash"></div>
+      <div class="pompous-no-navigation">
+        <!-- When recording a video of the presentation, and using skin="none" (which they should), users can click on this invisible div in the upper-left corner to mute/unmute the audio, if needed -->
+        <div class="pompous-no-navigation-audio-button" onClick="if(!pompousPlayer.isAudioOn()){pompousPlayer.toggleAudioOnOff();} pompousPlayer.togglePlayPauseResume(true)"></div>
+        <div class="pompous-no-navigation-current-state-div pp-selector-no-navigation-current-state-div">
+          The current play state will be inserted here by the player: it is one of: INIT_FINISHED, PLAYING, PAUSED, PERFORMANCE_FINISHED (meaning the whole play has finished).
+          This can be helpful when instrumenting the browser to e.g.record a video of the play, to know when to start and to end the recording. 
+        </div>
+      </div>
+      <!-- ================= End no-navigation-001 skin html ================= -->
+    </div>
+  </div>
+</body>
+</html>
