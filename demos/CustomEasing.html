@@ -137,11 +137,11 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
     <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
         <div class="pompous-video-like-nav-inner">
-          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onClick="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
-          <div class="pompous-nav-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
-          <div class="pompous-nav-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
-          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onClick="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
-          <div class="pompous-nav-button pp-selector-audio-on-off-button" onClick="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onmousedown="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onmousedown="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onmousedown="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onmousedown="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onmousedown="pompousPlayer.toggleAudioOnOff()"></div>
           <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
         </div>
         
@@ -156,7 +156,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
         <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
          
         <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
-          <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+          <div class="pompous-nav-button pp-selector-full-screen-button" onmousedown="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
         </div>
     </div>
     <!-- ================= End video-like-001 skin html ================= -->

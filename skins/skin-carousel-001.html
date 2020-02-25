@@ -134,7 +134,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
       </div>
     </div>
     <!-- Arrow Left -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-prev-animation-button pp-selector-prev-animation-button" onClick="pompousPlayer.playPreviousAnimationBackward()">
+    <div class="pompous-carousel-001-button pompous-carousel-001-prev-animation-button pp-selector-prev-animation-button" onmousedown="pompousPlayer.playPreviousAnimationBackward()">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill=" rgba(0, 0, 0, 0.4)" />
         <path stroke-width="15" d="M305.312,148.688c-6.25-6.25-16.375-6.25-22.625,0l-96,96c-6.25,6.25-6.25,16.375,0,22.625l96,96
@@ -145,7 +145,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
           
     
     <!-- Arrow Right -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-next-animation-button pp-selector-next-animation-button" onClick="pompousPlayer.playNextAnimationForward()" >
+    <div class="pompous-carousel-001-button pompous-carousel-001-next-animation-button pp-selector-next-animation-button" onmousedown="pompousPlayer.playNextAnimationForward()" >
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
         <path stroke-width="15" d="M212.688,363.312c6.25,6.25,16.375,6.25,22.625,0l96-96c6.25-6.25,6.25-16.375,0-22.625l-96-96
@@ -186,7 +186,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
      
     <!-- Play/pause/rewind -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onClick="pompousPlayer.togglePlayPauseResumeRewind(true)">
+    <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onmousedown="pompousPlayer.togglePlayPauseResumeRewind(true)">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
         <polygon class="pp-selector-play" points="6622,6080 10142,8000 6622,9920" fill="white"></polygon>
@@ -207,7 +207,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
    
     
     <!--  Full Screen on/off -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-full-screen-button pp-selector-full-screen-button pompous-carousel-001-top-buttons" onClick="pompousPlayer.toggleFullScreen()">
+    <div class="pompous-carousel-001-button pompous-carousel-001-full-screen-button pp-selector-full-screen-button pompous-carousel-001-top-buttons" onmousedown="pompousPlayer.toggleFullScreen()">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
         <g class="pp-selector-full-screen-on" style="display: block;">
@@ -222,7 +222,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
     
     <!--  Audio on/off -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-audio-on-off-button pp-selector-audio-on-off-button pompous-carousel-001-top-buttons" onClick="pompousPlayer.toggleAudioOnOff()" >
+    <div class="pompous-carousel-001-button pompous-carousel-001-audio-on-off-button pp-selector-audio-on-off-button pompous-carousel-001-top-buttons" onmousedown="pompousPlayer.toggleAudioOnOff()" >
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
         <g class="pp-selector-audio-on" style="display: block;">
