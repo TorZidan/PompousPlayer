@@ -6,7 +6,7 @@ It's a Javascript-based slideshow &amp; presentation player that can play any CS
 This enables us to develop professional online WYSIWYG presentation editors with a "timeline", that can instantly save the user's changes (there is no need to "render" the video each time it is edited). 
 By using HTML+CSS (instead of JS code) to define each presentation, it is extremely easy to automate the presentation creation by utilizing templates, wizards, etc.
 
-When we say "presentations", we don't mean the PowerPoint kind. We mean "videos" with slick animations of images, texts and short html5 videos.
+When we say "presentations", we don't mean the PowerPoint kind. We mean "videos" with slick animations of images, texts, short html5 videos and 3D panoramas.
 
 For the modest user who is not into building online presentation editors: You can create rich animated presentations without having to write a single line of JavaScript code (still, you may need basic JS knowledge). If you know CSS, you'll be right at home. 
 
@@ -32,7 +32,7 @@ Web browsers are powerful presentation tools. Still, creating a professional sli
 
 We've solved all these challenges in Pompous Player. 
 
-Think of it as a video player for a mix of css-based animations of images, texts and (optionally) html5 videos.
+Think of it as a video player for a mix of css-based animations of images, texts and (optionally) html5 videos and 3D panoramas.
 Furthermore, it could be used in an online WYSYWIG (what you see is what you get) video editing tool, so that users can instantly preview the "video" and "jump" into any point of time in the "video" play.
 
 Web developers can create rich online presentations with animated images, texts and videos using html and css; they can be played like a video with this player, even though they are not videos.
@@ -53,7 +53,7 @@ Here are the major features of Pompous Player:
 - You can embed a slideshow on another web page either by using an iframe (recommended), or by directly placing the presentation css, html and js code on the page.
 - You can have responsive presentations that fit the browser width or the with+height, and scale nicely on resize.
 - You can toggle the presentation in full screen, or exit full screen at any time.
-- You can add multiple html5 videos and show/hide, play/pause them at any desired time.
+- You can add multiple html5 videos and 3D panoramas, and show/hide, play/pause them at any desired time.
 - You can add an audio track, and it will be synchronized with the "video" at all times; play, pause, resume, jump work as expected.
 - Unlike in videos, you can have clickable buttons and links in your slideshow, and wire them up to do whatever you want.
 - You can set a presentation to auto-loop forever, until you faint!

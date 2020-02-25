@@ -34,3 +34,11 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   visibility: visible;
   opacity: 1.0;
 }
+
+/* Used in pannellum 3D panoramas */
+.pnlm-render-container {
+    cursor: inherit;    
+    position: absolute;
+    height: 100%;
+    width: 100%;
+}

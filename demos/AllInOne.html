@@ -1,9 +1,13 @@
 <!-- 
-In this example we "embedded" two short mp4 videos in the presentation.
+In this example we "embedded" two short mp4 videos and one 3D panorama in the presentation (in addition to many CSS animations).
 How it works:
-Each <video> is inside a parent <div> element which is an "actor" (has the data-classes="..." attribute).
-As soon as the CSS style display:visible is applied on the actor div (e.g. via data-classes="show"), the pompous player starts playing the video (and shows it).
-As soon as the CSS style display:hidden  is applied on the actor div (e.g. via data-classes="hide"), the pompous player stops playing the video (and hides it).
+The <pannellum-3d-panorama> html tag is a custom tag that only the pompous-player understands; 
+we use "pannellum" for displaying these 3D panoramas, see https://pannellum.org/.
+
+Each <video> and <pannellum-3d-panorama> element has the data-classes="..." attribute, which makes them "playable" by the pompous player.
+As soon as the CSS style --pp-video-state:play is applied on the html element (e.g. via data-classes="play-video  delay-10s"), the pompous player starts playing the video.
+As soon as the CSS style --pp-video-state:stop is applied on the html element (e.g. via data-classes="pause-video delay-20s"), the pompous player stops  playing the video.
+The CSS style --pp-video-state is a custom style that only the pompous player understands.
 
 Most of the file content is boilerplate css and html code for the video-like navigation bar.
  -->
@@ -16,12 +20,15 @@ Most of the file content is boilerplate css and html code for the video-like nav
 <meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
 
-<title>Demo of embedding html5 videos in the presentation</title>
+<title>Demo of embedding html5 videos and 3D panoramas in the presentation</title>
 
 <!-- These free fontawesome icons are used for the video-like navigation bar. -->
 <link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
 <link rel="stylesheet" href="../skins/stage.css" />
 <link rel="stylesheet" href="../skins/skin-video-like-001.css" />
+
+<!-- Pannellum is used for playing 3D panoramas. See https://pannellum.org/ -->
+<script type="text/javascript" src="https://storage.googleapis.com/pompous-photos-static/js/pannellum.min.js"></script>
 
 <!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
 <script type="text/javascript" src="../js/pp-dependencies.js"></script>
@@ -83,11 +90,10 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 <style>
 /* ================= Slideshow css begin ================= */
 
-/* Sets the visibility to hidden, opacity to 0 */
+/* Sets the visibility to hidden */
 .initially-hidden
 {
   visibility: hidden;
-  opacity: 0;
 }
 
 .hide {
@@ -96,6 +102,14 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 
 .show {
   visibility: visible;
+}
+
+.play-video {
+  --pp-video-state: play;
+}
+
+.pause-video {
+  --pp-video-state: pause;
 }
 
 .bg-image-initial-3
@@ -114,7 +128,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 }
 
 /* Slowly fades-in the html element, by changing it's opacity from 0 to 1. */
-.fade-in-solo-3
+.fade-in
 {
   visibility: visible;
   --pp-opacity-from: 0;
@@ -137,7 +151,6 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 .text-initial-7 {
   position: absolute;
   visibility: hidden;
-  opacity: 0;
   top: 100px;
   left: 200px;
   width: auto;
@@ -145,6 +158,8 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 }
 
 .static-text-1 {
+  position: absolute;
+  visibility: inherit;
   background-color: rgba(115, 163, 28, 0.55);
   padding: 0px 20px 0px 20px;
   font-family: 'Black And White Picture';
@@ -162,8 +177,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 
 .static-text-3 {
   position: absolute;
-  visibility: visible;
-  opacity: 1;
+  visibility: inherit;
   top: 100px;
   left: 100px;
   width: auto;
@@ -185,8 +199,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 
 .static-text-2 {
   position: absolute;
-  visibility: visible;
-  opacity: 1;
+  visibility: inherit;
   top: 750px;
   left: 500px;
   width: auto;
@@ -206,15 +219,8 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   border-style: none;
 }
 
-/* Shows the text outer div. */
-.text-show-outer-div-7
-{
-  visibility: visible;
-  opacity: 1;
-}
-
 /* Slowly fades-out the text, by changing it's opacity from 1 to 0. */
-.text-fade-out-outer-div-7
+.fade-out
 {
   --pp-opacity-from: 1;
   opacity: 0;
@@ -224,7 +230,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 }
 
 /*  */
-.bounceInRight-7
+.bounce-in-from-right
 {
   transition-property: transform;
   --pp-transform-from: translateX(2000px);
@@ -235,7 +241,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 }
 
 /*  */
-.bounceOut
+.bounce-out
 {
   transition-property: transform;
   --pp-transform-from: translateX(0px) scaleX(1) scaleY(1) scaleZ(1);
@@ -261,36 +267,12 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   position: absolute;
 }
 
-/* Prepares a bg image to slide-in from right to left, by placing it outside of the stage, to the right */
-.slide-in-from-right-initial
-{
-  transform: translateX(100%);
-  left: 0;
-  top: 0;
-}
-
-/* Sets the visibility to visible */
-.make-visible
-{
-  visibility: visible;
-  opacity: 1;
-}
-
 /* Slides-in a bg image from right to left */
 .slide-in-from-right-10
 {
+  visibility: visible;
   --pp-transform-from: translateX(100%) translateX(0%);
   transform: translateX(100%) translateX(-100%);
-  transition-property: transform;
-  transition-timing-function: ease-in;
-  transition-duration: 1s;
-}
-
-/* Slides-out a bg image from its resting position to the right, to outside of the screen. */
-.slide-out-to-right-10
-{
-  --pp-transform-from: translateX(100%) translateX(-100%) translateX(0%);
-  transform: translateX(100%) translateX(-100%) translateX(100%);
   transition-property: transform;
   transition-timing-function: ease-in;
   transition-duration: 1s;
@@ -339,12 +321,10 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   transition-duration: 1s;
 }
 
-/* Prepares a bg image to slide-in from top to bottom, by placing it outside of the stage, above it */
-.slide-in-from-top-initial
+.initial-location
 {
   left: 0;
   top: 0;
-  transform: translateY(-100%);
   overflow: hidden;
   position: absolute;
 }
@@ -385,14 +365,6 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   position: absolute;
 }
 
-/* Prepares a bg image to slide-in from bottom to top, by placing it outside of the stage, below it */
-.slide-in-from-bottom-initial
-{
-  left: 0;
-  top: 0;
-  transform: translateY(100%);
-}
-
 /* Slides-in a bg image from bottom to top */
 .slide-in-from-bottom-18
 {
@@ -409,39 +381,47 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 <body>
   <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
     <!-- ================= Begin slideshow html ================= -->
-    <div class="initially-hidden" data-classes="fade-in-solo-3 skippable delay-0.1s"><div class="bg-image-initial-3" data-classes="slide-out-to-left-3 skippable delay-6s"></div></div>
+    <div class="initially-hidden" data-classes="fade-in skippable delay-0.1s"><div class="bg-image-initial-3" data-classes="slide-out-to-left-3 skippable delay-6s"></div></div>
     
     <!-- This text is "detached" from the bg image above (not inside the div above), just because we can. The "skippable" class name below means that when clicking on << , >> buttons we'll "skip" these play positions -->
-    <div class="text-initial-7" data-classes="text-show-outer-div-7 skippable delay-1s">
-      <div class="static-text-1" data-classes="bounceInRight-7 skippable delay-1s, bounceOut skippable delay-5s">Welcome to
+    <div class="text-initial-7" data-classes="show skippable delay-1s">
+      <div class="static-text-1" data-classes="bounce-in-from-right skippable delay-1s, bounce-out skippable delay-5s">Welcome to
    Yellowstone
        National Park  </div>
     </div>
     
-    <div class="initially-hidden" data-classes="make-visible delay-6s">
-      <div class="slide-in-from-right-initial" data-classes="show slide-in-from-right-10 skippable delay-6s, hide skippable delay-13s">
-        <video class="video-element" id="video1" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone2.mp4"></video>
+    <div class="initially-hidden initial-location" data-classes="show skippable delay-6s, hide skippable delay-13s">
+      <video data-classes="play-video delay-6s, pause-video skippable delay-13s" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone2.mp4"></video>
+    </div>
+    
+    <div class="initially-hidden" data-classes="show delay-6s">
+      <div data-classes="show slide-in-from-right-10 skippable delay-6s, hide skippable delay-13s">
         <div class="static-text-2">The Old Faithful</div>
       </div>
     </div>
     
-    <div class="initially-hidden" data-classes="make-visible delay-12s">
-      <div class="bg-image-initial-13 slide-in-from-left-initial"data-classes="slide-in-from-left-13 skippable delay-12s">
+    <div class="initially-hidden" data-classes="show delay-12s">
+      <div class="bg-image-initial-13" data-classes="slide-in-from-left-13 skippable delay-12s, slide-out-to-left-3 delay-17s">
         <div class="static-text-3">Sky or Earth?</div>
       </div>
     </div>
     
-    <div class="initially-hidden" data-classes="make-visible delay-18s">
-      <div class="slide-in-from-top-initial" data-classes="show slide-in-from-top-16 skippable delay-18s, hide skippable delay-30s">
-        <!-- The #t=3 in the URL below can be used to start playing the video from offset 3 seconds vs. from the default 0 seconds: -->
-        <video class="video-element" id="video2" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone6.mp4#t=3"></video>
-        <div class="static-text-2">Fountain Paint Pot</div>
-      </div>
+    <div class="initially-hidden initial-location" data-classes="slide-in-from-right-10 skippable delay-17s, hide skippable delay-30s">
+      <!-- The #t=3 in the URL below can be used to start playing the video from offset 3 seconds vs. from the default 0 seconds: -->
+      <video data-classes="play-video delay-18s, pause-video skippable delay-30s" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone6.mp4#t=3"></video>
+      <div class="static-text-2">Fountain Paint Pot</div>
     </div>
     
-    <div class="initially-hidden" data-classes="make-visible delay-29s">
-      <div class="bg-image-initial-18 slide-in-from-bottom-initial" data-classes="slide-in-from-bottom-18 skippable delay-29s">
-        <div class="static-text-3" data-classes="bounceOut skippable delay-33s">The End</div>
+    <div class="initially-hidden" data-classes="fade-in skippable delay-29s">
+      <pannellum-3d-panorama speed="-6" yaw="-35" hfov="100" pitch="0" type ="equirectangular" 
+        src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/WintryGrandCanyon.jpg"
+        data-classes="play-video delay-29s, pause-video hide skippable delay-39s" 
+       ></pannellum-3d-panorama>
+    </div>
+    
+    <div class="initially-hidden" data-classes="show delay-39s">
+      <div class="bg-image-initial-18" data-classes="slide-in-from-bottom-18 skippable delay-39s">
+        <div class="static-text-3" data-classes="bounce-out skippable delay-43s">The End</div>
       </div>
     </div>
     <!-- ================= End slideshow html ================= -->
@@ -472,7 +452,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
         </div>
         
         <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
-        <!-- We removed the usual "share" menu html from here, for brevity. -->
+         
         <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
           <div class="pompous-nav-button pp-selector-full-screen-button" onClick="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
         </div>

@@ -23,7 +23,7 @@ Again, here are the major features of Pompous Player:
 - You can embed a slideshow on another web page either by using an iframe (recommended), or by directly placing the presentation css, html and js code on the page.
 - You can have responsive presentations that fit the browser width or the with+height, and scale nicely on resize.
 - You can toggle the presentation in full screen, or exit full screen at any time.
-- You can add multiple html5 videos and show/hide, play/pause them at any desired time.
+- You can add multiple html5 videos and 3D panoramas, and show/hide, play/pause them at any desired time.
 - You can add an audio track, and it will be synchronized with the "video" at all times; play, pause, resume, jump work as expected.
 - Unlike in videos, you can have clickable buttons and links in your slideshow, and wire them up to do whatever you want.
 - You can set a presentation to auto-loop forever, until you faint!
@@ -42,7 +42,7 @@ A presentation consists of:
 - CSS styles for the presentation animations: These could be stored directly in the html file in a &lt;style&gt; tag, or imported from a CSS file (NOTE: the origin of that file MUST be the same as the html file).
 - A &lt;script&gt; tag that imports the pompous player JS code.
 - A bunch of JS code to instantiate the presentation JS objects. If you just copy/paste from the demos, we've got you covered!
-- Html code for the presentation visual elements (images, texts and videos). We've'got well defined best practices on this one, read on.
+- Html code for the presentation visual elements (images, texts, videos, 3D panoramas). We've'got well defined best practices on this one, read on.
 - Html code for the "stage &lt;div&gt; and for the "skin". Ctrl +c/+v are your best friends.
 
 See these things in this [demo](demos/ZoomInOut.html).

@@ -6,7 +6,7 @@
 - [HelloWorldFlyingTexts.html](./HelloWorldFlyingTexts.html): Flying texts with a flair, play it [here](https://www.pompousphotos.com/html/GitHub/demos/HelloWorldFlyingTexts.html).
 - [Prezidio2x2.html](./Prezidio2x2.html) : zoom in-and-out on individual slides arranged in a 2 x 2 grid, play it [here](https://www.pompousphotos.com/html/GitHub/demos/Prezidio2x2.html).
 - [ThePerfectCarousel.html](./ThePerfectCarousel.html) : play it [here](https://www.pompousphotos.com/html/GitHub/demos/ThePerfectCarousel.html).
-- [VideoFragments.html](./VideoFragments.html) : demo of embedding videos in the presentation, play it [here](https://www.pompousphotos.com/html/GitHub/demos/VideoFragments.html).
+- [AllInOne.html](./AllInOne.html) : demo of embedding videos and 3D panoramas in the presentation, play it [here](https://www.pompousphotos.com/html/GitHub/demos/AllInOne.html).
 - [ZoomInOut.html](./ZoomInOut.html) : zoom-in, then zoom-out an image, play it [here](https://www.pompousphotos.com/html/GitHub/demos/ZoomInOut.html).
 
 We've got tons of other demos; stay tuned until we polish and post them. 
