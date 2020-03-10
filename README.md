@@ -8,7 +8,7 @@ By using HTML+CSS (instead of JS code) to define each presentation, it is extrem
 
 When we say "presentations", we don't mean the PowerPoint kind. We mean "videos" with slick animations of images, texts, short html5 videos and 3D panoramas.
 
-For the modest user who is not into building online presentation editors: You can create rich animated presentations without having to write a single line of JavaScript code (still, you may need basic JS knowledge). If you know CSS, you'll be right at home. 
+For the common user who is NOT developing an online presentation editing tool: You can create rich animated presentations without having to write a single line of JavaScript code (still, you may need basic JS knowledge). If you know CSS, you'll be right at home. 
 
 ## Contents
 * [Installation and Getting Started](#installation-and-getting-started)

@@ -48,15 +48,13 @@ const pompousNavigation = new PompousCarouselNavigation({stageId:"the-pompous-st
 const pompousOptions = {
    autoStart: "true",
    autoRestartAtEnd: false, 
+   autoStartAudioMuted: true,
    startBlank: true,
    designWidth: 1920,
    designHeight: 1080,
    stageId: "the-pompous-stage",
    loadNImagesAhead: 10,
-   autoStartAudioMuted: true,
-   audio: "../demo-resources/Boom_de_Boom.mp3",
-   webfonts: {
-             },
+   webfonts: {},
    pompousEventNotifier: pompousNavigation,
    // Upon page load, resize the stage div element to fit the window/iframe width AND height:
    afterInit: () => {updateStageScale(pompousPlayer)},
@@ -251,6 +249,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 <body>
   <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
     <!-- ================= Begin slideshow html ================= -->
+    <audio loop preload="metadata" data-classes="play-media skippable delay-0s, pause-media skippable delay-34s" src="../demo-resources/Boom_de_Boom.mp3"></audio>
     <!-- Quite simple and selfexplanatory: each CSS class will be applied at the specified delay from the play start:  -->
     <div class="initially-hidden" data-classes="fade-in      skippable delay-0s" ><div class="bg-image-initial-1"                             data-classes="slide-out-to-left skippable delay-3s"                      ></div></div>
     <div class="initially-hidden" data-classes="make-visible skippable delay-3s" ><div class="bg-image-initial-2 slide-in-from-right-initial" data-classes="slide-in-from-right delay-3s,  slide-out-to-left delay-9s" ></div></div>

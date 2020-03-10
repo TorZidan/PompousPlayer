@@ -70,9 +70,9 @@ class PompousNavigationDispatcher {
       obj.videoPlayPaused();
     }
   }
-  videoPlayErrored() {
+  videoPlayErrored(error) {
     for(const obj of this.pompousNavigationObjectsArray) {
-      obj.videoPlayErrored();
+      obj.videoPlayErrored(error);
     }
   }
   progressUpdate(progressText, playDurationMs, totalPlayDurationMs, isInstant) {
@@ -140,13 +140,13 @@ const pompousNavigationDispatcher = new PompousNavigationDispatcher([pompousVide
 
 const pompousOptions = {
    autoStart: "true",
+   autoStartAudioMuted: true,
    autoRestartAtEnd: false, 
    startBlank: true,
    designWidth: 1920,
    designHeight: 1080,
    stageId: "the-pompous-stage",
    loadNImagesAhead: 5,
-   audio: "../demo-resources/Boom_de_Boom.mp3",
    webfonts: {},
    pompousEventNotifier: pompousNavigationDispatcher,
    // Upon page load, resize the stage div element to fit the available width:
@@ -264,7 +264,7 @@ function changeSkin(skinName) {
   <div id="the-stage-container-div" style="width:100%; height:0; padding-bottom:56.25%; position:relative; margin:0 0; background-color:black;">
     <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
       <!-- ================= Begin slideshow html ================= -->
-      
+      <audio loop preload="metadata" data-classes="play-media skippable delay-0s, pause-media skippable delay-20s" src="../demo-resources/Boom_de_Boom.mp3"></audio>
       <!-- Applies CSS class "bg-image-initial" at page load time (before starting playing), 
       then applies CSS class "zoom-in-from-left-top-transition"  at play time 0, 
       then applies CSS class "zoom-out-from-left-top-transition" at play time 10 seconds. -->

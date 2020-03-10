@@ -1,16 +1,3 @@
-<!-- 
-In this example we "embedded" two short mp4 videos and one 3D panorama in the presentation (in addition to many CSS animations).
-How it works:
-The <pannellum-3d-panorama> html tag is a custom tag that only the pompous-player understands; 
-we use "pannellum" for displaying these 3D panoramas, see https://pannellum.org/.
-
-Each <video> and <pannellum-3d-panorama> element has the data-classes="..." attribute, which makes them "playable" by the pompous player.
-As soon as the CSS style --pp-video-state:play is applied on the html element (e.g. via data-classes="play-video  delay-10s"), the pompous player starts playing the video.
-As soon as the CSS style --pp-video-state:stop is applied on the html element (e.g. via data-classes="pause-video delay-20s"), the pompous player stops  playing the video.
-The CSS style --pp-video-state is a custom style that only the pompous player understands.
-
-Most of the file content is boilerplate css and html code for the video-like navigation bar.
- -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,9 +6,22 @@ Most of the file content is boilerplate css and html code for the video-like nav
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
-
 <title>Demo of embedding html5 videos and 3D panoramas in the presentation</title>
 
+<!-- 
+In this example we "embedded" two short mp4 videos and one 3D panorama in the presentation (in addition to many CSS animations).
+How it works:
+The <pannellum-3d-panorama> html tag is a custom tag that only the pompous-player understands; 
+we use "pannellum" for displaying these 3D panoramas, see https://pannellum.org/.
+
+Each <video> and <pannellum-3d-panorama> element has the data-classes="..." attribute, which makes them "playable" by the pompous player.
+As soon as the CSS style --pp-media-state:play is applied on the html element (e.g. via data-classes="play-media  delay-10s"), the pompous player starts playing the video.
+As soon as the CSS style --pp-media-state:stop is applied on the html element (e.g. via data-classes="pause-mdia delay-20s"), the pompous player stops  playing the video.
+Note: the CSS style --pp-media-state is a custom style that only the pompous player understands.
+
+Most of the file content is boilerplate css and html code for the video-like navigation bar.
+-->
+ 
 <!-- These free fontawesome icons are used for the video-like navigation bar. -->
 <link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
 <link rel="stylesheet" href="../skins/stage.css" />
@@ -46,15 +46,14 @@ Most of the file content is boilerplate css and html code for the video-like nav
 <script>
 const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:true});
 const pompousOptions = {
-   autoStart: "false",
+   autoStart: "true",
+   autoStartAudioMuted: true,
    autoRestartAtEnd: false, 
    startBlank: true,
    designWidth: 1920,
    designHeight: 1080,
    stageId: "the-pompous-stage",
    loadNImagesAhead: 5,
-   autoStartAudioMuted: true,
-   audio: "https://pompous-photos-static.storage.googleapis.com/free-audio/JazzAndBlues/Boom_de_Boom.mp3",
    webfonts: {
      "google": { 
        "families": ["Black And White Picture:400", ]
@@ -102,14 +101,6 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 
 .show {
   visibility: visible;
-}
-
-.play-video {
-  --pp-video-state: play;
-}
-
-.pause-video {
-  --pp-video-state: pause;
 }
 
 .bg-image-initial-3
@@ -381,6 +372,8 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 <body>
   <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
     <!-- ================= Begin slideshow html ================= -->
+    <audio loop preload="metadata" data-classes="play-media skippable delay-0s, pause-media skippable delay-44s" src="https://pompous-photos-static.storage.googleapis.com/free-audio/JazzAndBlues/Boom_de_Boom.mp3"></audio>
+    
     <div class="initially-hidden" data-classes="fade-in skippable delay-0.1s"><div class="bg-image-initial-3" data-classes="slide-out-to-left-3 skippable delay-6s"></div></div>
     
     <!-- This text is "detached" from the bg image above (not inside the div above), just because we can. The "skippable" class name below means that when clicking on << , >> buttons we'll "skip" these play positions -->
@@ -391,7 +384,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
     
     <div class="initially-hidden initial-location" data-classes="show skippable delay-6s, hide skippable delay-13s">
-      <video data-classes="play-video delay-6s, pause-video skippable delay-13s" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone2.mp4"></video>
+      <video preload="metadata" data-classes="play-media delay-6s, pause-media skippable delay-13s" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone2.mp4"></video>
     </div>
     
     <div class="initially-hidden" data-classes="show delay-6s">
@@ -408,14 +401,14 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     
     <div class="initially-hidden initial-location" data-classes="slide-in-from-right-10 skippable delay-17s, hide skippable delay-30s">
       <!-- The #t=3 in the URL below can be used to start playing the video from offset 3 seconds vs. from the default 0 seconds: -->
-      <video data-classes="play-video delay-18s, pause-video skippable delay-30s" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone6.mp4#t=3"></video>
+      <video preload="metadata" data-classes="play-media delay-18s, pause-media skippable delay-30s" src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/yellowstone6.mp4#t=3"></video>
       <div class="static-text-2">Fountain Paint Pot</div>
     </div>
     
     <div class="initially-hidden" data-classes="fade-in skippable delay-29s">
       <pannellum-3d-panorama speed="-6" yaw="-35" hfov="100" pitch="0" type ="equirectangular" 
         src="https://storage.googleapis.com/pompous-photos-static/sample-images/yellowstone/WintryGrandCanyon.jpg"
-        data-classes="play-video delay-29s, pause-video hide skippable delay-39s" 
+        data-classes="play-media delay-29s, pause-media hide skippable delay-39s" 
        ></pannellum-3d-panorama>
     </div>
     

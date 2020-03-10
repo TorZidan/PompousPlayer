@@ -231,14 +231,14 @@ class PompousCarouselMobileTouchListener {
             console.warn("Cound not find what's playing at touch-start play position "+playDurationMillisAtTouchJustStart+" millis. Choosing some default values.");
             whatIsAtTouchJustStart = {
                 durationMs: 1000,
-                transitionTimingStr: "linear",
+                overallTransitionTimingStr: "linear",
             }
           }
           
           const currentSlideAnimDurationMs = whatIsAtTouchJustStart.durationMs || 1000;
           maxPlayTimeForSwipeToLeftMillis  =  currentSlideAnimDurationMs*(xdown)/stageWidth;
           maxPlayTimeForSwipeToRightMillis =  currentSlideAnimDurationMs*(stageWidth - xdown)/stageWidth;
-          const currentSlideEasingFunctionStr = whatIsAtTouchJustStart.transitionTimingStr;
+          const currentSlideEasingFunctionStr = whatIsAtTouchJustStart.overallTransitionTimingStr;
           slideAnimMirrorEasingFunction = mirrorEasingFunctions[currentSlideEasingFunctionStr] || mirrorEasingFunctions["linear"];
           slideAnimMirrorEasingFunctionAtTime1 = slideAnimMirrorEasingFunction(1);
           directionOfOngoingTouchmove = swipingForward;
@@ -730,11 +730,13 @@ class PompousVideoLikeNavigation {
   }
   
   videoPlayErrored(error) {
-    if(error.name !== "AbortError") {
-      // Don't show this error, as it's not an error but a valid use case:
-      // Uncaught (in promise) DOMException: The play() request was interrupted
-      // by a call to pause().
+    if(error && error.name !== "AbortError" && error.name !=="NotAllowedError") {
+      // Don't show these errors, as there is no work around them:
+      // AbortError: The play() request was interrupted by a call to pause().
+      // NotAllowedError: The request is not allowed by the user agent or the platform in the current context, possibly because the user denied permission.
       this.$statusBar.html("Could not play video!");
+    } else {
+      this.$statusBar.html("");
     }
   }
   
@@ -1238,6 +1240,19 @@ class PompousCarouselNavigation {
     this.$stage.find(".pp-selector-pause").css("display", "none"); 
   }
   
+  waitingForVideoToPlay() {
+    // To do: show a spinner here
+  }
+  
+  videoPlayStarted() {
+  }
+  
+  videoPlayPaused() {
+  }
+  
+  videoPlayErrored(error) {
+  }
+  
   /**
    * Invoked only when playing forward and finishing the play at the "right"
    * end.
@@ -1369,6 +1384,10 @@ class PompousBlankNavigation {
   }
   
   imageLoaded(image, totalImagesToBeLoaded, message) {}
+  waitingForVideoToPlay() {}
+  videoPlayStarted() {}
+  videoPlayPaused() {}
+  videoPlayErrored(error) {}
   progressUpdate(progressText, playDurationMs, totalPlayDurationMs, isInstant) {}
   onPrevOrNextAnimationChange(playing, currentAnimationGroupIndex, totalAnimationGroups, displayIndex) {}
   reset(hasAudio, isAudioMuted) {}

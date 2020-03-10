@@ -41,13 +41,11 @@ const pompousOptions = {
    designHeight: 1080,
    stageId: "the-pompous-stage",
    loadNImagesAhead: 5,
-   autoStartAudioMuted: true,
-   audio: "",
    webfonts: {
-               "google": { 
-                 "families": ["Gorditas:400", ]
-               },
-             },
+     "google": { 
+       "families": ["Gorditas:400", ]
+     },
+   },
    pompousEventNotifier: pompousNavigation,
    // Upon page load, resize the stage div element to fit the window/iframe width AND height:
    afterInit: () => {updateStageScale(pompousPlayer)},
@@ -130,6 +128,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   
   --pp-opacity-from: 0;
   --pp-opacity-60: 1;
+  --pp-opacity-timing-function: linear;
   opacity: 1;
   
   --pp-transform-from: translateX(-2000px);
@@ -137,7 +136,8 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   --pp-transform-75:   translateX(-10px);
   --pp-transform-90:   translateX(5px); 
   transform:           translateX(0px);
-  --pp-transition-timing-function: easeOutCubic;
+  --pp-transform-timing-function: easeOutCubic;
+  
   --pp-transition-precision: 3;
   transition-duration: 1s;
   --pp-delay: 0s;
@@ -149,12 +149,14 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   
   --pp-opacity-from: 1;
   --pp-opacity-20: 1;
+  --pp-opacity-timing-function: linear;
   opacity: 0;
   
   --pp-transform-from: translateX(0px);
   --pp-transform-20:   translateX(-20px);  
   transform:           translateX(2000px);
-  --pp-transition-timing-function: ease;
+  --pp-transform-timing-function: ease;
+  
   --pp-transition-precision: 3;
   transition-duration: 1s;
   --pp-delay: 2.5s;
@@ -167,13 +169,15 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   
   --pp-opacity-from: 0;
   --pp-opacity-60: 1;
+  --pp-opacity-timing-function: linear;
   opacity: 1;
   
   --pp-transform-from: skewX(15deg)  translateX(-2000px);
   --pp-transform-80:   skewX(0deg)   translateX(0px);  
   --pp-transform-90:   skewX(-15deg) translateX(10px); 
   transform:           skewX(0deg)   translateX(0px);
-  --pp-transition-timing-function: ease-in;
+  --pp-transform-timing-function: ease-in;
+  
   --pp-transition-precision: 3;
   transition-duration: 1s;
   --pp-delay: 0s;
@@ -184,13 +188,15 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   transition-property: transform, opacity;
   
   --pp-opacity-from: 1;
-  --pp-opacity-50: 1;
+  --pp-opacity-20: 1;
+  --pp-opacity-timing-function: linear;
   opacity: 0;
   
   --pp-transform-from: skewX(0deg)  translateX(0px);
   --pp-transform-20:   skewX(10deg) translateX(0px);  
   transform:           skewX(30deg) translateX(2000px);
-  --pp-transition-timing-function: ease;
+  --pp-transform-timing-function: ease;
+  
   --pp-transition-precision: 3;
   transition-duration: 1s;
   --pp-delay: 2.5s;
