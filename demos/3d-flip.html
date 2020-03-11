@@ -97,10 +97,15 @@ body {
   background-color: black;
 }
 
-/* Normally the stage div does not overflow. But we override it here to do so.
-   This way, when the 3d cube rotates, we can see it's edges extending out of the stage. */
+/* 
+Normally the stage div does not overflow. But we override it here to do so.
+This way, when the 3d cube rotates, we can see it's edges extending out of the stage. 
+The visibility: hidden is needed on iOS (Chrome&Safari); without it, the stage is always black.
+*/
 #the-pompous-stage {
   overflow: visible;
+  visibility: hidden;
+  perspective: 3000px;
 }
 
 /* ================= Slideshow css begin ================= */

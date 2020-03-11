@@ -62,7 +62,7 @@ class PompousNavigationDispatcher {
   }
   videoPlayStarted() {
     for(const obj of this.pompousNavigationObjectsArray) {
-      videoPlayStarted();
+      obj.videoPlayStarted();
     }
   }
   videoPlayPaused() {
