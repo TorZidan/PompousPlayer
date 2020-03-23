@@ -25,57 +25,14 @@
 <script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
 -->
 
-<script>
-//The value "rJgnWwCGRYu9ZIaUK7AVXg" was chosen randomly. 
-//By using a different value for each slideshow, we can have more-than-one slideshows on one web page.
-const pompousNavigation = new PompousBlankNavigation({stageId:"the-pompous-stage"});
-const pompousOptions = {
-   autoStart: "true",
-   autoRestartAtEnd: true, 
-   startBlank: true,
-   designWidth: 1920,
-   designHeight: 1080,
-   stageId: "the-pompous-stage",
-   loadNImagesAhead: 5,
-   autoStartAudioMuted: true,
-   audio: "../demo-resources/Boom_de_Boom.mp3",
-   webfonts: {
-             },
-   pompousEventNotifier: pompousNavigation,
-   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
-   afterInit: () => {updateStageScale(pompousPlayer)},
-   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
-};
-const pompousPlayer = new PompousPlayer(pompousOptions);
-
-ppDocumentReady( () => {
-  //Listen for touch events on mobile devices:
-  new PompousMobileTouchListener(
-    document,
-    (swipeDirection) => {
-      if(swipeDirection==="right") {
-        pompousPlayer.playPreviousAnimation();
-      } else if(swipeDirection==="left") {
-        pompousPlayer.playNextAnimation();
-      }
-    }
-  );
-});
-
-// On each window resize: resize the stage div element to fit the window/iframe width AND height:
-window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
-</script>
 <style>
 /* ================= Slideshow css ================= */
 
-/* Sets the visibility to hidden, opacity to 0 */
 .initially-hidden
 {
   visibility: hidden;
-  opacity: 0;
 }
 
-/* ... */
 .bg-image-initial
 {
   background-image: url('../demo-resources/apple.jpg');
@@ -102,7 +59,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   transition-duration: 0.5s;
 }
 
-/* ... */
+/* Scales (zooms-in) an html element from 1 to 1.30 (30%). If the element has a background image, it gets scaled too. */
 .zoom-in-from-left-top-transition
 {
   --pp-transform-from: scale(1);
@@ -118,17 +75,20 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 </head>
 <body>
   <!--The slideshow html (including the skin) is contained in a div element, a.k.a. "stage" div: -->
-  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+  <div data-pompous-player-stage data-skin="derive-from-html" class="pompous-stage" tabindex="0">
   
     <!-- ================= Begin slideshow html ================= -->
-    <div class="bg-image-initial" data-classes="fade-in delay-0s, zoom-in-from-left-top-transition skippable delay-0.5s"></div>
+    <audio loop preload="metadata" data-classes="play-media skippable delay-0s, pause-media skippable delay-6s" src="../demo-resources/Boom_de_Boom.mp3"></audio>
+    <div class="bg-image-initial initially-hidden" data-classes="fade-in delay-0s, zoom-in-from-left-top-transition skippable delay-0.5s"></div>
     <!-- ================= End slideshow html ================= -->
 
     <!-- ================= Begin no-navigation-001 skin boilerplate html code ================= -->
     <div class="pompous-no-navigation-splash pp-selector-no-navigation-splash"></div>
     <div class="pompous-no-navigation">
-    <!-- When recording a video of the presentation, and using skin="none" (which they should), users can click on this invisible div in the upper-left corner to mute/unmute the audio, if needed -->
-      <div class="pompous-no-navigation-audio-button" onClick="if(!pompousPlayer.isAudioOn()){pompousPlayer.toggleAudioOnOff();} pompousPlayer.togglePlayPauseResume(true)"></div>
+    <!-- When recording a video of the presentation, and using this skin (which you should), you can click on this invisible div located in the upper-left corner, 
+         to start the play and to unmute the audio, if needed.
+         In addition, make sure to add data-auto-start="false" to the stage <div> above, so that the presentation will not auto-start once the page loads. -->
+      <div class="pompous-no-navigation-audio-button" onClick="if(!getPpPlayer(event).isAudioOn()) {getPpPlayer(event).toggleAudioOnOff();} getPpPlayer(event).togglePlayPauseResume(true)"></div>
       <div class="pompous-no-navigation-current-state-div pp-selector-no-navigation-current-state-div">
         The current play state will be inserted here by the player: it is one of: INIT_FINISHED, PLAYING, PAUSED, PERFORMANCE_FINISHED (meaning the whole play has finished).
         This can be helpful when instrumenting the browser to e.g.record a video of the play, to know when to start and to end the recording. 

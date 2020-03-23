@@ -1,5 +1,5 @@
 /**
- * @preserve Pompous Player v24 Skins.
+ * @preserve Pompous Player v26 Skins.
  * 
  * @license Copyright (c) 2020 Pompous Media LLC. All rights reserved.
  * Subject to the terms at 
@@ -346,7 +346,6 @@ class PompousVideoLikeNavigation {
      */ 
     this.pompousPlayer = undefined;
     this.presentationOptions = undefined;
-    this.stageId = navigationOptions["stageId"];
     this.$stage = undefined;
     this.$sliderNavigationDiv = undefined;
     this.$playPauseResumeButton = undefined;
@@ -377,12 +376,18 @@ class PompousVideoLikeNavigation {
     
     // Invoked at page load, once the document is ready:
     ppDocumentReady( () => {
-      this.$stage = $("#"+this.stageId);
+      var stageId = navigationOptions["stageId"];
+      if(stageId && (typeof stageId === 'string') && !stageId.startsWith('#') && !stageId.startsWith('.')) {
+          stageId = "#" + stageId;
+      }
+      // stageId could be an HTMLElement or a string, both work well below:
+      this.$stage = $(stageId);      
+      
       if(this.$stage.length===0) {
         alert("Invalid play script! Developer, see the browser console for more info.");
-        throw Error("No such stage element in the DOM document: '"+this.stageId+"'!");
+        throw Error("No such stage element in the DOM document: '"+stageId+"'!");
       }
-      this.$sliderNavigationDiv = $("#"+this.stageId+" .pp-selector-video-like-navigation");      
+      this.$sliderNavigationDiv = this.$stage.find(".pp-selector-video-like-navigation");
       this.$playPauseResumeButton = this.$sliderNavigationDiv.find(".pp-selector-play-pause-resume-button");
       this.$prevAnimationButton = this.$sliderNavigationDiv.find(".pp-selector-prev-animation-button");
       this.$nextAnimationButton = this.$sliderNavigationDiv.find(".pp-selector-next-animation-button");
@@ -645,7 +650,7 @@ class PompousVideoLikeNavigation {
   
   initFinished(presentationOptions, totalPlayDurationMs) {
     // Hide the splash div:
-    $("#"+this.stageId+" .pp-selector-video-like-splash").css("visibility", "hidden");
+    this.$stage.find(".pp-selector-video-like-splash").css("visibility", "hidden");
     
     // Remove any "Loading presentation ..." visuals:
     this.$statusBar.html("");
@@ -656,8 +661,8 @@ class PompousVideoLikeNavigation {
     this.$nextAnimationButton.css("opacity", 1.0);
     
     this.$currentPlayTimeDiv.text("0:00");
-    $("#"+this.stageId+" .pp-selector-nav-slash").text("/");
-    $("#"+this.stageId+" .pp-selector-nav-total-play-time").text(this._playDurationTimeMsToStr(totalPlayDurationMs));
+    this.$stage.find(".pp-selector-nav-slash").text("/");
+    this.$stage.find(".pp-selector-nav-total-play-time").text(this._playDurationTimeMsToStr(totalPlayDurationMs));
   
     if(this.pompousPlayer.hasAudioOrVideos()) {
       if(this.pompousPlayer.isAudioOn()) {
@@ -975,7 +980,6 @@ class PompousCarouselNavigation {
      */ 
     this.pompousPlayer = undefined;
     this.presentationOptions = undefined;
-    this.stageId = navigationOptions["stageId"];
     this.$stage = undefined;
     this.$playPauseResumeButton = undefined;
     this.$prevAnimationButton = undefined;
@@ -996,19 +1000,25 @@ class PompousCarouselNavigation {
     this.performanceFinishedBackwardBool = true;    
   
     ppDocumentReady( () => {
-      this.$stage = $("#"+this.stageId);
+      var stageId = navigationOptions["stageId"];
+      if(stageId && (typeof stageId === 'string') && !stageId.startsWith('#') && !stageId.startsWith('.')) {
+          stageId = "#" + stageId;
+      }
+      // stageId could be an HTMLElement or a string, both work well below:
+      this.$stage = $(stageId);      
+      
       if(this.$stage.length===0) {
         alert("Invalid play script! Developer, see the browser console for more info.");
-        throw Error("No such stage element in the DOM document: '"+this.stageId+"'!");
+        throw Error("No such stage element in the DOM document: '"+stageId+"'!");
       }
-      this.$playPauseResumeButton = $("#"+this.stageId+" .pp-selector-play-pause-resume-button");
-      this.$prevAnimationButton = $("#"+this.stageId+" .pp-selector-prev-animation-button");
-      this.$nextAnimationButton = $("#"+this.stageId+" .pp-selector-next-animation-button");
-      this.$audioOnOffButton = $("#"+this.stageId+" .pp-selector-audio-on-off-button");
-      this.$fullScreenButton = $("#"+this.stageId+" .pp-selector-full-screen-button");
-      this.$statusBar = $("#"+this.stageId+" .pp-selector-status-bar");
-      this.$shareButton = $("#"+this.stageId+" .pp-selector-share-button");
-      this.$shareMenu = $("#"+this.stageId+" .pp-selector-share-menu");
+      this.$playPauseResumeButton = this.$stage.find(".pp-selector-play-pause-resume-button");
+      this.$prevAnimationButton = this.$stage.find(".pp-selector-prev-animation-button");
+      this.$nextAnimationButton = this.$stage.find(".pp-selector-next-animation-button");
+      this.$audioOnOffButton = this.$stage.find(".pp-selector-audio-on-off-button");
+      this.$fullScreenButton = this.$stage.find(".pp-selector-full-screen-button");
+      this.$statusBar = this.$stage.find(".pp-selector-status-bar");
+      this.$shareButton = this.$stage.find(".pp-selector-share-button");
+      this.$shareMenu = this.$stage.find(".pp-selector-share-menu");
       
       this.$playPauseResumeButton.css("opacity", 0.5);
       this.$prevAnimationButton.css("opacity", 0.5);
@@ -1131,7 +1141,7 @@ class PompousCarouselNavigation {
   
   initFinished(presentationOptions, totalPlayDurationMs) {
     // Hide the splash div:
-    $("#"+this.stageId+" .pp-selector-carousel-splash").css("visibility", "hidden");
+    this.$stage.find(".pp-selector-carousel-splash").css("visibility", "hidden");
     
     this.$playPauseResumeButton.css("opacity", 1.0);
     this.$nextAnimationButton.css("opacity", 1.0);
@@ -1363,11 +1373,23 @@ class PompousBlankNavigation {
      */ 
     this.pompousPlayer = undefined;
     this.presentationOptions = undefined;
-    this.stageId = navigationOptions["stageId"];
+    this.$stage = undefined;
     this.$currentStateDiv = undefined;
     
     ppDocumentReady( () => {
-      this.$currentStateDiv = $("#"+this.stageId+" .pp-selector-no-navigation-current-state-div");
+      var stageId = navigationOptions["stageId"];
+      if(stageId && (typeof stageId === 'string') && !stageId.startsWith('#') && !stageId.startsWith('.')) {
+          stageId = "#" + stageId;
+      }
+      // stageId could be an HTMLElement or a string, both work well below:
+      this.$stage = $(stageId);      
+      
+      if(this.$stage.length===0) {
+        alert("Invalid play script! Developer, see the browser console for more info.");
+        throw Error("No such stage element in the DOM document: '"+stageId+"'!");
+      }
+      
+      this.$currentStateDiv = this.$stage.find(".pp-selector-no-navigation-current-state-div");
     });
   } // end constructor
   
@@ -1378,7 +1400,9 @@ class PompousBlankNavigation {
   
   initFinished(presentationOptions, totalPlayDurationMs) {
     // Hide the splash div:
-    $("#"+this.stageId+" .pp-selector-no-navigation-splash").css("visibility", "hidden");
+    this.$stage.find(".pp-selector-video-like-splash").css("visibility", "hidden");
+    this.$stage.find(".pp-selector-carousel-splash").css("visibility", "hidden");
+    this.$stage.find(".pp-selector-no-navigation-splash").css("visibility", "hidden");
     
     this.$currentStateDiv.text("INIT_FINISHED");
   }

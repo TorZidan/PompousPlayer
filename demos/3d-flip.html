@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+
+<title>Flip a 3D cube 8 times over it's vertical axis</title>
+
 <!--
 How the 3D cube example works:
 A 3D cube is usually a set of 6 div-s (let's name them "front" right", back", etc..., one per each side of the cube), contained in a parent div, let's name it "cube" div.
@@ -16,18 +27,8 @@ What's the trick? We have hidden sides up our magician sleeves, and we replace p
 Note the "--pp-transform-from" css styles below, and read their comments. 
 This is a custom css style that the Pompous Player expects to find in each CSS class that does a CSS "transition".
 
-Most of the file content is boilerplate JS code and html code for the video-like navigation bar.
+Most of the file content is boilerplate html code for the video-like navigation bar.
  -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<link rel="shortcut icon" href="../demo-resources/pp_logo_60x60.ico">
-<meta charset="utf-8">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
-
-<title>Flip a 3D cube 8 times over it's vertical axis</title>
 
 <!-- These free fontawesome icons are used for the video-like navigation bar. -->
 <link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
@@ -46,50 +47,6 @@ Most of the file content is boilerplate JS code and html code for the video-like
 <!-- Optionally, you can replace the three JS files above with one:  
 <script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
 -->
-
-<script>
-const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false});
-const pompousOptions = {
-   autoStart: "true",
-   autoRestartAtEnd: false, 
-   startBlank: true,
-   designWidth: 1920,
-   designHeight: 1080,
-   // Give the "stage" a nice transparent margin, so that when the cube rotates we can see it's content outside of the stage.
-   stageBorderSize: 50,
-   stageId: "the-pompous-stage",
-   loadNImagesAhead: 5,
-   webfonts: {
-     "google": { 
-       "families": ["Cute Font:400", ]
-     },
-   },
-   pompousEventNotifier: pompousNavigation,
-   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
-   afterInit: () => {updateStageScale(pompousPlayer)},
-   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
-};
-const pompousPlayer = new PompousPlayer(pompousOptions);
-
-ppDocumentReady( () => {
-  pompousPlayer.getStageElement().focus();
-  
-  //Listen for touch events on mobile devices:
-  new PompousMobileTouchListener(
-    document,
-    (swipeDirection) => {
-      if(swipeDirection==="right") {
-        pompousPlayer.playPreviousAnimation();
-      } else if(swipeDirection==="left") {
-        pompousPlayer.playNextAnimation();
-      }
-    }
-  );
-});
-
-// On each window resize: resize the stage div element to fit the window/iframe width AND height:
-window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
-</script>
 
 <style>
 
@@ -290,7 +247,11 @@ The visibility: hidden is needed on iOS (Chrome&Safari); without it, the stage i
 
 </head>
 <body>
-  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+  <div data-pompous-player-stage 
+    data-skin="derive-from-html"
+    data-webfonts='{"google": {"families":["Cute Font:400"]}}'
+    class="pompous-stage" tabindex="0">
+    
     <!-- ================= Begin slideshow html ================= -->    
     <!-- The 3d-cube's parent div:
       At time 0s:   Show the front side of the cube (numbered "1") by applying class "show" on the cube div.
@@ -342,7 +303,7 @@ The visibility: hidden is needed on iOS (Chrome&Safari); without it, the stage i
     </div>
     <!-- ================= End slideshow html ================= -->
     
-    <!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
+    <<!-- ================= Begin video-like-001 skin html (the video-like navigation bar at the bottom of the presentation) ================= -->
     <div class="pompous-video-like-splash pp-selector-video-like-splash">
       <div class="pompous-loader-div">
         <!--  'Loading' animated circle -->
@@ -351,11 +312,11 @@ The visibility: hidden is needed on iOS (Chrome&Safari); without it, the stage i
     </div>
     <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
         <div class="pompous-video-like-nav-inner">
-          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onmousedown="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
-          <div class="pompous-nav-button pp-selector-prev-animation-button" onmousedown="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
-          <div class="pompous-nav-button pp-selector-next-animation-button" onmousedown="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
-          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onmousedown="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
-          <div class="pompous-nav-button pp-selector-audio-on-off-button" onmousedown="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onmousedown="getPpPlayer(event).togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onmousedown="getPpPlayer(event).playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onmousedown="getPpPlayer(event).playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onmousedown="getPpPlayer(event).restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onmousedown="getPpPlayer(event).toggleAudioOnOff()"></div>
           <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
         </div>
         
@@ -370,13 +331,13 @@ The visibility: hidden is needed on iOS (Chrome&Safari); without it, the stage i
         <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
          
         <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
-          <div class="pompous-nav-button pp-selector-share-button" onClick="pompousNavigation.toggleShowHideShareMenu(event)" >
+          <div class="pompous-nav-button pp-selector-share-button" onClick="getPpSkin(event).toggleShowHideShareMenu(event)" >
             <i class="fa fa-share-alt"></i>
             <div class="pompous-share-menu pp-selector-share-menu" style="display:none;">
                 <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
                 <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
                 <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
-                <button class="button" onClick="pompousNavigation.shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+                <button class="button" onClick="getPpSkin(event).shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
                 <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
                 <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
                 <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
@@ -386,10 +347,10 @@ The visibility: hidden is needed on iOS (Chrome&Safari); without it, the stage i
                 <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
                 <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
                 <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
-                <button class="button" onClick="pompousNavigation.copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+                <button class="button" onClick="getPpSkin(event).copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
             </div>
           </div>          
-          <div class="pompous-nav-button pp-selector-full-screen-button" onmousedown="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+          <div class="pompous-nav-button pp-selector-full-screen-button" onmousedown="getPpPlayer(event).toggleFullScreen()"><i class="fas fa-expand"></i></div>
         </div>
     </div>
     <!-- ================= End video-like-001 skin html ================= -->

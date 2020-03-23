@@ -42,7 +42,7 @@ function BezierEasing(a,b,c,h){if(!(0<=a&&1>=a&&0<=c&&1>=c))throw Error("bezier 
 d=k>=NEWTON_MIN_SLOPE?newtonRaphsonIterate(d,f,a,c):0===k?f:binarySubdivide(d,e,e+kSampleStepSize,a,c);return calcBezier(d,b,h)}};
 
 /**
- * @preserve Pompous Player v25.
+ * @preserve Pompous Player v26.
  * 
  * @license Copyright (c) 2020 Pompous Media LLC. All rights reserved.
  * Subject to the terms at 
@@ -67,9 +67,9 @@ window['getPompousUrlParams'] = getPompousUrlParams;
  * (the way a video does). Note: If someone is directly embedding a presentation
  * on his web page, this may be undesirable. Therefore we recommend to embed
  * the presentation in an iframe. Or you could write your own
- * updateStageScale() function to do something else.
+ * function to do something else.
  */
-function updateStageScale(pompousPlayer, optionalMaxWidthInPixels) {
+function updateStageScaleToFitWidthAndHeight(pompousPlayer, optionalMaxWidthInPixels) {
   if(pompousPlayer.isInFullScreen()) {
     // Do nothing in full screen.It's handled by the player code.
     return;
@@ -207,3 +207,98 @@ const transitionTimingFunctions = {
  "swing":          (t) => {return 0.5 - Math.cos(percentComplete * Math.PI)/2;},
  "spring":         (t) => {return 1 - (Math.cos(t * 4.5 * Math.PI) * Math.exp(-t * 6));},
 }
+
+
+// The code below is part of the "Zero Javascript code" option. It allows defining presentations without having to write any JS code.
+ppDocumentReady( () => {
+  const stageElems = document.querySelectorAll("[data-pompous-player-stage]"); // or querySelectorAll("[data-pompous-player-stage='']");
+  for (const stageElem of stageElems) {
+    
+    var pompousEventNotifier;
+    const skinName = stageElem.getAttribute("data-skin");
+    switch(skinName) {
+      case "video-like":
+        pompousEventNotifier = new PompousVideoLikeNavigation({stageId:stageElem, hideShareButton:false});
+        break;
+      case "carousel":
+        pompousEventNotifier = new PompousCarouselNavigation({stageId:stageElem, hideShareButton:false});
+        break;
+      case "none":
+      case "blank":
+        pompousEventNotifier = new PompousBlankNavigation({stageId:stageElem});
+        break;
+      case "derive-from-html":
+      default:
+        if(stageElem.querySelectorAll(".pp-selector-video-like-splash").length >0) {
+          pompousEventNotifier = new PompousVideoLikeNavigation({stageId:stageElem, hideShareButton:false});
+        } else if(stageElem.querySelectorAll(".pp-selector-carousel-splash").length >0) {
+          pompousEventNotifier = new PompousCarouselNavigation({stageId:stageElem, hideShareButton:false});
+        } else if(stageElem.querySelectorAll(".pp-selector-no-navigation-splash").length >0) {
+          pompousEventNotifier = new PompousBlankNavigation({stageId:stageElem, hideShareButton:false});
+        } else {
+          console.warn("Found stage attribute data-skin=\"derive-from-html\", but could not derive the skin from the html within the stage element! Will use a \"blank\" skin.");
+          pompousEventNotifier = new PompousBlankNavigation({stageId:stageElem});
+        }
+    }
+    
+    const webfontsStr = stageElem.getAttribute("data-webfonts") || "{}";
+    var webfontsObj;
+    try{
+      webfontsObj = JSON.parse(webfontsStr);
+    } catch(e) {
+      console.warn("Could not parse value in attribute data-webfonts=\""+webfontsStr+"\"! Will use {} (an empty set of webfonts) instead. The error is: "+e);
+      webfontsObj = {};
+    }
+    
+    // TODO: add documentation, copy from pp-player.js
+    // implement different skins and their attributes (e.g. "hideShareButton")
+    const pompousOptions = {
+        stageId: stageElem, 
+        autoStart: stageElem.getAttribute("data-auto-start") || true,
+        autoStartAudioMuted: stageElem.getAttribute("data-auto-start-audio-muted") || true,
+        autoRestartAtEnd: stageElem.getAttribute("data-auto-restart-at-end") || false,
+        autoRestartAtStart: stageElem.getAttribute("data-auto-restart-at-start") || false,
+        startBlank: stageElem.getAttribute("data-start-blank") || false,
+        designWidth: parseInt(stageElem.getAttribute("data-design-width")) || 1920,
+        designHeight: parseInt(stageElem.getAttribute("data-design-height")) || 1080,
+        stageBorderSize: parseInt(stageElem.getAttribute("data-stage-border-size")) || 0,
+        loadNImagesAhead: parseInt(stageElem.getAttribute("data-load-n-images-ahead")) || 5,
+        webfonts: webfontsObj,
+        pompousEventNotifier: pompousEventNotifier,
+        logLevel: parseInt(stageElem.getAttribute("data-log-level")) || 2,
+     };
+    const pompousPlayer = new PompousPlayer(pompousOptions);
+    
+    // Setup mobile swipe/touch actions:
+    if(pompousEventNotifier instanceof PompousVideoLikeNavigation) {
+      /** Listen for touch events on mobile devices: */
+      new PompousMobileTouchListener(
+        document,
+        (swipeDirection) => {
+          if(swipeDirection==="right") {
+            pompousPlayer.playPreviousAnimation();
+          } else if(swipeDirection==="left") {
+            pompousPlayer.playNextAnimation();
+          }
+        }
+      );
+    } else if(pompousEventNotifier instanceof PompousCarouselNavigation) {
+      /** 
+       * Listens for touch events on mobile devices (actually on all devices, and that's ok). 
+       * The 1st argument is the "player" instance.
+       * Limitations/ requirements:
+       *  - Each carousel "slide" animation should be marked as non-skippable (should not have the data-class?-skippable attribute); this way the left/right swipe will get to the next/previous "slide".
+       *  - There should be some (>0 millis) "pause" before next "slide" animation (does not need to be the same for all images).
+       *  - It works best with the following easing functions: "linear", "ease", "ease-in", "ease-out", "ease-in-out".
+       * For more info, see the PompousCarouselMobileTouchListener code in file js/pp-skins.js.
+       */
+       new PompousCarouselMobileTouchListener(pompousPlayer);
+    }
+    
+    pompousPlayer.init();
+    // TODO: support "fit width" and "fit width and height":
+    updateStageScaleToFitWidthAndHeight(pompousPlayer);
+    // On each window resize: resize the stage div element to fit the window/iframe width AND height:
+    window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
+  }  
+});

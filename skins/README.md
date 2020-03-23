@@ -1,39 +1,25 @@
 
 The Pompous Player can be customized to have different looks:
 
-- [skin-carousel-001.html  : carousel](https://www.pompousphotos.com/html/GitHub/skins/skin-carousel-001.html), with < and > buttons on each side, and muuuch mooore.
-- [skin-no-navigation-001.html : have no buttons at all](https://www.pompousphotos.com/html/GitHub/skins/skin-no-navigation-001.html). 
-- [skin-video-like-001.html:  video-like](https://www.pompousphotos.com/html/GitHub/skins/skin-video-like-001.html), with a progress bar on the bottom. Can you tell it's not video?
+- [skin-carousel-001.html](https://www.pompousphotos.com/html/GitHub/skins/skin-carousel-001.html) : a carousel with < (previous) and > (next) buttons on each side, and muuuch mooore.
+- [skin-no-navigation-001.html](https://www.pompousphotos.com/html/GitHub/skins/skin-no-navigation-001.html) : have no buttons at all. 
+- [skin-video-like-001.html](https://www.pompousphotos.com/html/GitHub/skins/skin-video-like-001.html) :  video-like, with a progress bar and play controls at the bottom. Can you tell it's not video?
 
-We call these "skins". Each file above is a full slideshow, with just one slide in it.
+We call these "skins". Each file above is a full slideshow, with just one "slide" in it.
 
 How does it work?
 Look for the "skin" comments in the CSS and HTML sections of the files.
 Diff a couple of skin files to see the diff!
-Each skin is composed of CSS and HTML code (in the files above), plus it's own "navigation" JS object in [/js/pp-skins.js](https://github.com/TorZidan/PompousPlayer/tree/master//js/pp-skins.js)
-Things are stitched together with few lines of JS code; you'll find something like this in every slideshow html file:
+Each skin is composed of CSS, HTML and Javascript code.
 
-```html
-<script>
-// Use the "like-a-video" skin:
-const pompousNavigation = new PompousVideoLikeNavigation({skinName:"video-like-001, anything goes here", stageId:"the-pompous-stage", hideShareButton:false});
+Let's look at the "video-like" skin:
+It provides a video-like progress bar and play controls at the bottom of the presentation.
 
-const pompousOptions = {
-   // ... some optional options here
-   // Let the player know about the skin navigation object, so that it can call functions on it, at will:
-   pompousEventNotifier: pompousNavigation,
-};
+- the html for the progress bar is in [skin-video-like-001.html](./skin-video-like-001.html). Look at the html code between the <!-- ================= Begin video-like-001 skin html ... --> comment and the <!-- ================= End video-like-001 skin html ================= --> comments. 
+- the CSS for this skin is in file [skin-video-like-001.css](./skin-video-like-001.css).
+- the javascript code for this skin is in file [pp-skins.js](../js/pp-skins.js), look for "class PompousVideoLikeNavigation".
 
-// This will also initialize the Pompous Player at the right time (at page load, upon "document ready"):
-const pompousPlayer = new PompousPlayer(pompousOptions);
-
-// Then, optionally, add a window resize listener:
-window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
-
-// Then, optionally, add a mobile swipe listener (not shown)
-</script>
-
-```
+The best part is: YOU CAN REUSE ALL OF THIS, WITHOUT HAVING TO CHANGE A SINGLE LINE OF CODE. Or you can tweak a skin to match your needs. The code is clean, simple, and easy to understand.
 
 Interested in implementing your own skin? Are you a bioengineer of sort?
 Here's all you need to know. 
@@ -42,7 +28,12 @@ Each skin navigation object (e.g. PompousVideoLikeNavigation) must have the foll
 these are functions that the Pompous Player invokes on the navigation object, to let it know of the play progress:
 
 ```html
-/** @constructor */
+/** 
+ * All play durations below are in milliseconds, and are always counted 
+ * from the "left beginning" of the play (even if the presentation is currently playing backwards).
+ * This way they can be used directly to draw e.g. a progress bar of the play.
+ * 
+ * @constructor */
 function PompousNavigationInterface(navigationOptions) {};
 PompousNavigationInterface.prototype.initStarted = function(presentationOptions, thePompousPlayer) {};
 PompousNavigationInterface.prototype.initFinished = function(presentationOptions, totalPlayDurationMs) {};
@@ -63,8 +54,8 @@ PompousNavigationInterface.prototype.performanceFinished = function() {};
 PompousNavigationInterface.prototype.performanceFinishedBackward = function() {};
 PompousNavigationInterface.prototype.fullScreenChanged = function(a) {};
 PompousNavigationInterface.prototype.toggleShowHideShareMenu = function(event) {};
-PompousNavigationInterface.prototype.copyPresentationUrlToClipboard = function(a) {};
-PompousNavigationInterface.prototype.shareViaGmail = function(a) {};
+PompousNavigationInterface.prototype.copyPresentationUrlToClipboard = function() {};
+PompousNavigationInterface.prototype.shareViaGmail = function() {};
 ```
 Note: what you see above is a set of google closure compiler "externs" that we use to closure-compile the code in [pp-skins.js](../js/pp-skins.js). If you don't know what this is, don't worry about it.
 
@@ -89,7 +80,6 @@ PompousPlayerInterface.prototype.playNextAnimationForward = function() {};
 PompousPlayerInterface.prototype.restartFromBeginning = function() {};
 PompousPlayerInterface.prototype.toggleAudioOnOff = function() {};
 PompousPlayerInterface.prototype.isAudioOn = function() {};
-PompousPlayerInterface.prototype.hasAnyVideos = function() {};
 PompousPlayerInterface.prototype.hasAudioOrVideos = function() {};
 PompousPlayerInterface.prototype.isAnyVideoBuffering = function() {};
 PompousPlayerInterface.prototype.toggleFullScreen = function() {};
@@ -103,7 +93,10 @@ PompousPlayerInterface.prototype.getCurrentPlayTime = function() {};
 PompousPlayerInterface.prototype.getCurrentPlayTimeCountedFromLeftStart = function() {};
 PompousPlayerInterface.prototype.getTotalPlayDuration = function() {};
 PompousPlayerInterface.prototype.whatNonskippableAnimationIsAt = function(playDurationMs) {};
+PompousPlayerInterface.prototype.getPompousEventNotifier = function() {};
 ```
+
+To "register" your "skin", add a few lines [here](../js/pp-dependencies.js#L218). 
 
 Make sure to share your new skin by emailing us at support@pompousphotos.com. We don't accept skins via regular nail!
 

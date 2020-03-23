@@ -11,8 +11,8 @@
 
 <!-- These free fontawesome icons are used for the "share" menu icons. -->
 <link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
-<link rel="stylesheet" href="../skins/stage.css" />
-<link rel="stylesheet" href="../skins/skin-carousel-001.css" />
+<link rel="stylesheet" href="./stage.css" />
+<link rel="stylesheet" href="./skin-carousel-001.css" />
 
 <!-- Contains the Pompous Player "dependencies" JS code (third-party open-source code that the player needs), mostly minified -->
 <script type="text/javascript" src="../js/pp-dependencies.js"></script>
@@ -27,57 +27,14 @@
 <script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
 -->
 
-<script>
-// The value "rJgnWwCGRYu9ZIaUK7AVXg" was chosen randomly. 
-// By using a different value for each slideshow, you can have more-than-one slideshows on one web page.
-const pompousNavigation = new PompousCarouselNavigation({stageId:"the-pompous-stage", hideShareButton:false});
-const pompousOptions = {
-   autoStart: "true",
-   autoRestartAtEnd: true, 
-   startBlank: true,
-   designWidth: 1920,
-   designHeight: 1080,
-   stageId: "the-pompous-stage",
-   loadNImagesAhead: 5,
-   autoStartAudioMuted: true,
-   audio: "../demo-resources/Boom_de_Boom.mp3",
-   webfonts: {},
-   pompousEventNotifier: pompousNavigation,
-   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
-   afterInit: () => {updateStageScale(pompousPlayer)},
-   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
-};
-const pompousPlayer = new PompousPlayer(pompousOptions);
-
-ppDocumentReady( () => {
-  //Listen for touch events on mobile devices:
-  new PompousMobileTouchListener(
-    document,
-    (swipeDirection) => {
-      if(swipeDirection==="right") {
-        pompousPlayer.playPreviousAnimation();
-      } else if(swipeDirection==="left") {
-        pompousPlayer.playNextAnimation();
-      }
-    }
-  );
-});
-
-// On each window resize: resize the stage div element to fit the window/iframe width AND height:
-window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
-</script>
-
 <style>
 /* ================= Slideshow css ================= */
 
-/* Sets the visibility to hidden, opacity to 0 */
 .initially-hidden
 {
   visibility: hidden;
-  opacity: 0;
 }
 
-/* ... */
 .bg-image-initial
 {
   background-image: url('../demo-resources/apple.jpg');
@@ -104,7 +61,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
   transition-duration: 0.5s;
 }
 
-/* ... */
+/* Scales (zooms-in) an html element from 1 to 1.30 (30%). If the element has a background image, it gets scaled too. */
 .zoom-in-from-left-top-transition
 {
   --pp-transform-from: scale(1);
@@ -120,9 +77,10 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 </head>
 <body>
   <!--The slideshow html (including the skin) is contained in a div element, a.k.a. "stage" div: -->
-  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+  <div data-pompous-player-stage data-skin="derive-from-html" class="pompous-stage" tabindex="0">
   
     <!-- ================= Begin slideshow html ================= -->
+    <audio loop preload="metadata" data-classes="play-media skippable delay-0s, pause-media skippable delay-6s" src="../demo-resources/Boom_de_Boom.mp3"></audio>    
     <div class="bg-image-initial initially-hidden" data-classes="fade-in delay-0s, zoom-in-from-left-top-transition skippable delay-0.5s"></div>
     <!-- ================= End slideshow html ================= -->
 
@@ -134,7 +92,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
       </div>
     </div>
     <!-- Arrow Left -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-prev-animation-button pp-selector-prev-animation-button" onmousedown="pompousPlayer.playPreviousAnimationBackward()">
+    <div class="pompous-carousel-001-button pompous-carousel-001-prev-animation-button pp-selector-prev-animation-button" onmousedown="getPpPlayer(event).playPreviousAnimationBackward()">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill=" rgba(0, 0, 0, 0.4)" />
         <path stroke-width="15" d="M305.312,148.688c-6.25-6.25-16.375-6.25-22.625,0l-96,96c-6.25,6.25-6.25,16.375,0,22.625l96,96
@@ -145,7 +103,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
           
     
     <!-- Arrow Right -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-next-animation-button pp-selector-next-animation-button" onmousedown="pompousPlayer.playNextAnimationForward()" >
+    <div class="pompous-carousel-001-button pompous-carousel-001-next-animation-button pp-selector-next-animation-button" onmousedown="getPpPlayer(event).playNextAnimationForward()" >
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
         <path stroke-width="15" d="M212.688,363.312c6.25,6.25,16.375,6.25,22.625,0l96-96c6.25-6.25,6.25-16.375,0-22.625l-96-96
@@ -155,7 +113,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
     
     <!-- Share -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-share-button pp-selector-share-button pompous-carousel-001-top-buttons" onClick="pompousNavigation.toggleShowHideShareMenu(event)" >
+    <div class="pompous-carousel-001-button pompous-carousel-001-share-button pp-selector-share-button pompous-carousel-001-top-buttons" onClick="getPpSkin(event).toggleShowHideShareMenu(event)" >
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
         <path d="M342.906,210.25c22.733,0,41.172-18.438,41.172-41.172c0-22.719-18.438-41.156-41.172-41.156
@@ -171,7 +129,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
         <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
         <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
         <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
-        <button class="button" onClick="pompousNavigation.shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+        <button class="button" onClick="getPpSkin(event).shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
         <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
         <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
         <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
@@ -181,12 +139,12 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
         <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
         <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
         <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
-        <button class="button" onClick="pompousNavigation.copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+        <button class="button" onClick="getPpSkin(event).copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
       </div>
     </div>
      
     <!-- Play/pause/rewind -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onmousedown="pompousPlayer.togglePlayPauseResumeRewind(true)">
+    <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onmousedown="getPpPlayer(event).togglePlayPauseResumeRewind(true)">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
         <polygon class="pp-selector-play" points="6622,6080 10142,8000 6622,9920" fill="white"></polygon>
@@ -207,7 +165,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
    
     
     <!--  Full Screen on/off -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-full-screen-button pp-selector-full-screen-button pompous-carousel-001-top-buttons" onmousedown="pompousPlayer.toggleFullScreen()">
+    <div class="pompous-carousel-001-button pompous-carousel-001-full-screen-button pp-selector-full-screen-button pompous-carousel-001-top-buttons" onmousedown="getPpPlayer(event).toggleFullScreen()">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
         <g class="pp-selector-full-screen-on" style="display: block;">
@@ -222,7 +180,7 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
     
     <!--  Audio on/off -->
-    <div class="pompous-carousel-001-button pompous-carousel-001-audio-on-off-button pp-selector-audio-on-off-button pompous-carousel-001-top-buttons" onmousedown="pompousPlayer.toggleAudioOnOff()" >
+    <div class="pompous-carousel-001-button pompous-carousel-001-audio-on-off-button pp-selector-audio-on-off-button pompous-carousel-001-top-buttons" onmousedown="getPpPlayer(event).toggleAudioOnOff()" >
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
         <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
         <g class="pp-selector-audio-on" style="display: block;">

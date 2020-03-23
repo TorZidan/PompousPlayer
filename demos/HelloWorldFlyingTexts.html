@@ -1,7 +1,3 @@
-<!-- 
-Demonstrates moving texts with "velocity".
-We came up with these transformation values via common sense and trial-and-error. 
--->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,6 +8,13 @@ We came up with these transformation values via common sense and trial-and-error
 <meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
 
 <title>Hello world with flying texts</title>
+
+<!-- 
+Demonstrates moving texts with "velocity".
+The "bounceInLeft", "bounceInLeft" effects are from https://daneden.github.io/animate.css/
+The "skewInLeft", "skewOutright" are our art. 
+We came up with these transformation values via common sense and trial-and-error. 
+-->
 
 <!-- These free fontawesome icons are used for the video-like navigation bar. -->
 <link rel="stylesheet" href="../demo-resources/fontawesome-all.min.css" />
@@ -30,47 +33,6 @@ We came up with these transformation values via common sense and trial-and-error
 <!-- Optionally, you can replace the three JS files above with one:  
 <script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
 -->
-
-<script>
-const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:true});
-const pompousOptions = {
-   autoStart: "true",
-   autoRestartAtEnd: true,
-   startBlank: true,
-   designWidth: 1920,
-   designHeight: 1080,
-   stageId: "the-pompous-stage",
-   loadNImagesAhead: 5,
-   webfonts: {
-     "google": { 
-       "families": ["Gorditas:400", ]
-     },
-   },
-   pompousEventNotifier: pompousNavigation,
-   // Upon page load, resize the stage div element to fit the window/iframe width AND height:
-   afterInit: () => {updateStageScale(pompousPlayer)},
-   stageStyle: "background-color:black;",
-   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
-};
-const pompousPlayer = new PompousPlayer(pompousOptions);
-
-ppDocumentReady( () => {
-  //Listen for touch/swipe events on mobile devices:
-  new PompousMobileTouchListener(
-    pompousPlayer.getStageElement(),
-    (swipeDirection) => {
-      if(swipeDirection==="right") {
-        pompousPlayer.playPreviousAnimation();
-      } else if(swipeDirection==="left") {
-        pompousPlayer.playNextAnimation();
-      }
-    }
-  );
-});
-
-// On each window resize: resize the stage div element to fit the window/iframe width AND height:
-window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
-</script>
 
 <style>
 
@@ -206,7 +168,10 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
 
 </head>
 <body>
-  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+  <div data-pompous-player-stage 
+    data-skin="derive-from-html"
+    data-webfonts='{"google": {"families":["Gorditas:400"]}}'
+    class="pompous-stage" tabindex="0">
     <!-- ================= Begin slideshow html ================= -->
     <div class="text1-initial" data-classes="bounceInLeft, bounceOutRight">Hello World</div>
     <div class="text2-initial" data-classes="skewInLeft, skewOutRight">Hello World</div>
@@ -221,11 +186,11 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
     </div>
     <div class="pompous-video-like-navigation pp-selector-video-like-navigation">
         <div class="pompous-video-like-nav-inner">
-          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onmousedown="pompousPlayer.togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
-          <div class="pompous-nav-button pp-selector-prev-animation-button" onmousedown="pompousPlayer.playPreviousAnimation()"><i class="fas fa-backward"></i></div>
-          <div class="pompous-nav-button pp-selector-next-animation-button" onmousedown="pompousPlayer.playNextAnimation()"><i class="fas fa-forward"></i></div>
-          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onmousedown="pompousPlayer.restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
-          <div class="pompous-nav-button pp-selector-audio-on-off-button" onmousedown="pompousPlayer.toggleAudioOnOff()"></div>
+          <div class="pompous-nav-button pp-selector-play-pause-resume-button" onmousedown="getPpPlayer(event).togglePlayPauseResume(true)"><i class="fas fa-pause"></i></div>
+          <div class="pompous-nav-button pp-selector-prev-animation-button" onmousedown="getPpPlayer(event).playPreviousAnimation()"><i class="fas fa-backward"></i></div>
+          <div class="pompous-nav-button pp-selector-next-animation-button" onmousedown="getPpPlayer(event).playNextAnimation()"><i class="fas fa-forward"></i></div>
+          <div class="pompous-nav-button pp-selector-rewind-to-beginning-button" onmousedown="getPpPlayer(event).restartFromBeginning()"><i class="fas fa-sync-alt"></i></div>                            
+          <div class="pompous-nav-button pp-selector-audio-on-off-button" onmousedown="getPpPlayer(event).toggleAudioOnOff()"></div>
           <div class="pompous-nav-current-play-time pp-selector-nav-current-play-time"></div><div class="pp-selector-nav-slash"></div><div class="pompous-nav-total-play-time pp-selector-nav-total-play-time"></div>
         </div>
         
@@ -240,7 +205,26 @@ window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
         <div class="pompous-video-like-nav-inner pompous-status-bar pp-selector-status-bar"></div>
          
         <div class="pompous-video-like-nav-inner" style="padding-right:30px;">
-          <div class="pompous-nav-button pp-selector-full-screen-button" onmousedown="pompousPlayer.toggleFullScreen()"><i class="fas fa-expand"></i></div>
+          <div class="pompous-nav-button pp-selector-share-button" onClick="getPpSkin(event).toggleShowHideShareMenu(event)" >
+            <i class="fa fa-share-alt"></i>
+            <div class="pompous-share-menu pp-selector-share-menu" style="display:none;">
+                <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
+                <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
+                <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
+                <button class="button" onClick="getPpSkin(event).shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+                <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
+                <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
+                <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
+                <button class="button" data-sharer="reddit"     data-title="" data-url=""><i class="fab fa-reddit-alien" style="color:red"></i>Share on Reddit</button>
+                <button class="button" data-sharer="flipboard"  data-title="" data-url=""><i class="fab fa-flipboard"  style="color:red"></i>Share on Flipboard</button>
+                <button class="button" data-sharer="hackernews" data-title="" data-url=""><i class="fab fa-hacker-news" style="color:orange"></i>Share on Hackernews</button>
+                <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
+                <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
+                <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
+                <button class="button" onClick="getPpSkin(event).copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+            </div>
+          </div>          
+          <div class="pompous-nav-button pp-selector-full-screen-button" onmousedown="getPpPlayer(event).toggleFullScreen()"><i class="fas fa-expand"></i></div>
         </div>
     </div>
     <!-- ================= End video-like-001 skin html ================= -->

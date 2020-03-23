@@ -66,15 +66,13 @@ const pompousOptions = {
   // ... some more presentation options here ...
   // Important: Let the player know about the skin navigation object, so that it can call functions on it, at will:
   pompousEventNotifier: pompousNavigation,
-  // Upon page load, resize the stage div element to fit the window/iframe width AND height:
-  afterInit: () => {updateStageScale(pompousPlayer)},
 };
 
 // This will also initialize the Pompous Player at the right time (at page load, upon "document ready"):
 const pompousPlayer = new PompousPlayer(pompousOptions);
 
 // Then, optionally, add a window resize listener:
-window.addEventListener("resize", () => {updateStageScale(pompousPlayer)});
+window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
 
 // Then, optionally, add a mobile swipe listener (not shown, but you can see it in the demos)
 </script>
@@ -92,7 +90,7 @@ const pompousPlayer = new PompousPlayer({
   designHeight: 1080,
   pompousEventNotifier: new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false}),
 });
-window.addEventListener( "resize", () => {updateStageScale(pompousPlayer)});
+window.addEventListener( "resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
 // Then, optionally, add a mobile swipe listener (not shown, but you can see it in the demos)
 </script>
 
@@ -121,12 +119,6 @@ const pompousOptions = {
       // Required. The "skin" JS code, 
       // e.g. pompousEventNotifier: new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false}),
       "pompousEventNotifier": undefined,
-      
-      // An optional function that will be invoked at the end of init();
-      // This is a good place to add code to scale the stage elem. to fit the
-      // browser width or height or both.
-      // If not set, the following will be used: afterInit: () => {updateStageScale(...the..pompous..player...)}
-      "afterInit" : undefined,
       
       // - "false": Do not start playing on page load. Keep the stage div's CSS style "visibility:hidden" until the user requests play.
       // - "true": Start playing as soon as the web page loads:
@@ -379,7 +371,7 @@ Here is a full example:
 }
 ```
 
-See all currently available easing functions [here](js/pp-dependencies.js#L142)
+See all currently available easing functions [here](js/pp-dependencies.js#L145).
 All of them have a value of 0 at time 0, and value of 1 at time 1 (similar to all browser easing functions); however, this is not strictly required. You can go wild, but try to keep the values between 0 and 1 at all times. See demo [CustomEasing.html](demos/CustomEasing.html)
 
 If you want to define and use your own custom easing function, add it to the presentation html file:
