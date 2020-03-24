@@ -269,6 +269,13 @@ ppDocumentReady( () => {
      };
     const pompousPlayer = new PompousPlayer(pompousOptions);
     
+    pompousPlayer.init();
+    // TODO: support "fit width" and "fit width and height":
+    updateStageScaleToFitWidthAndHeight(pompousPlayer);
+    
+    // On each window resize: resize the stage div element to fit the window/iframe width AND height:
+    window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
+    
     // Setup mobile swipe/touch actions:
     if(pompousEventNotifier instanceof PompousVideoLikeNavigation) {
       /** Listen for touch events on mobile devices: */
@@ -294,11 +301,5 @@ ppDocumentReady( () => {
        */
        new PompousCarouselMobileTouchListener(pompousPlayer);
     }
-    
-    pompousPlayer.init();
-    // TODO: support "fit width" and "fit width and height":
-    updateStageScaleToFitWidthAndHeight(pompousPlayer);
-    // On each window resize: resize the stage div element to fit the window/iframe width AND height:
-    window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
   }  
 });
