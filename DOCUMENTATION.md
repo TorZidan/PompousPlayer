@@ -94,7 +94,7 @@ Here is the minimum JS code for a presentation:
 ```javascript
 <script>
 // Use the "like-a-video" skin:
-const pompousNavigation = new PompousVideoLikeNavigation({"stage-id":"the-pompous-stage", "hide-share-button":false});
+const pompousNavigation = new PompousVideoLikeNavigation({"stage-id":"#the-pompous-stage", "hide-share-button":false});
 
 const pompousOptions = {
   // Required: The "selector" of the "stage" div html element, 
@@ -145,17 +145,17 @@ The PompousVideoLikeNavigation contains the JS code for the video-like skin. It 
 The presentation "options" object is just a plain old JS object with a few name/value pairs. 
 
 Below we list all player options and their default values (if you don't specify any option yourself, the default value below will be used).
-Only the first two options are required : 'stageId' and 'pompousEventNotifier'; there are no default value for them. See the Javascript section above for how to set them.
+Only the first two options are required : "stage-id" and "player-event-listener"; there are no default value for them. See the Javascript section above for how to set them.
 
 ```javascript
 const pompousOptions = {
-      // Required: The id of the "stage" div html element, 
-      // e.g. "stageId": "#the-pompous-stage"      
+      // Required: The id of the "stage" div html element, or the DOM element itself, 
+      // e.g. "stage-id": "#the-pompous-stage"      
       // for <div id="the-pompous-stage">...the...presentation..html...here...</div>
       "stage-id": undefined,
       
       // Required. Sets up the "skin" JS code to receive events from the player, 
-      // e.g. "player-event-listener": new PompousVideoLikeNavigation({stageId:"the-pompous-stage", "hide-share-button":false}),
+      // e.g. "player-event-listener": new PompousVideoLikeNavigation({"stage-id":"#the-pompous-stage", "hide-share-button":false}),
       "player-event-listener": undefined,
       
       // - "false": Do not start playing on page load. Keep the stage div's CSS style "visibility:hidden" until the user requests play.
