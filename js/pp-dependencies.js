@@ -82,20 +82,20 @@ function updateStageScaleToFitWidthAndHeight(pompousPlayer, optionalMaxWidthInPi
   const wh = (window.outerHeight==0  || isInIframeBool)? window.innerHeight : Math.min(window.innerHeight, window.outerHeight);  
   const options = pompousPlayer.getOptions();
   
-  if(optionalMaxWidthInPixels!==undefined && ww>=(optionalMaxWidthInPixels+options['stageBorderSize']*2)) {
+  if(optionalMaxWidthInPixels!==undefined && ww>=(optionalMaxWidthInPixels+options["stage-border-size"]*2)) {
     // The browser window is larger than the desired size. No need to scale anything. Apply a fixed scale:
-    var newScale = (optionalMaxWidthInPixels+options['stageBorderSize']*2)/options['designWidth'];    
+    var newScale = (optionalMaxWidthInPixels+options["stage-border-size"]*2)/options["design-width"];    
     newScale = Math.round(newScale * 100) / 100;
     pompousPlayer.scaleStage(newScale);
   } else {
     // The common use case:
     var newScale;
-    if(ww/wh < options['designWidth']/options['designHeight']) { 
+    if(ww/wh < options["design-width"]/options["design-height"]) { 
       // tall ratio
-      newScale = (ww-options['stageBorderSize']*2) / options['designWidth'];
+      newScale = (ww-options["stage-border-size"]*2) / options["design-width"];
     } else { 
       // wide ratio
-      newScale = (wh-options['stageBorderSize']*2) / options['designHeight'];
+      newScale = (wh-options["stage-border-size"]*2) / options["design-height"];
     }
     newScale = Math.round(newScale * 100) / 100;
     pompousPlayer.scaleStage(newScale);
@@ -218,26 +218,26 @@ ppDocumentReady( () => {
     const skinName = stageElem.getAttribute("data-skin");
     switch(skinName) {
       case "video-like":
-        pompousEventNotifier = new PompousVideoLikeNavigation({stageId:stageElem, hideShareButton:false});
+        pompousEventNotifier = new PompousVideoLikeNavigation({"stage-id":stageElem, "hide-share-button":false, "hide-audio-button":false, "hide-full-screen-button":false});
         break;
       case "carousel":
-        pompousEventNotifier = new PompousCarouselNavigation({stageId:stageElem, hideShareButton:false});
+        pompousEventNotifier = new PompousCarouselNavigation({"stage-id":stageElem, "hide-share-button":false, "hide-audio-button":false, "hide-full-screen-button":false});
         break;
       case "none":
       case "blank":
-        pompousEventNotifier = new PompousBlankNavigation({stageId:stageElem});
+        pompousEventNotifier = new PompousBlankNavigation({"stage-id":stageElem});
         break;
       case "derive-from-html":
       default:
         if(stageElem.querySelectorAll(".pp-selector-video-like-splash").length >0) {
-          pompousEventNotifier = new PompousVideoLikeNavigation({stageId:stageElem, hideShareButton:false});
+          pompousEventNotifier = new PompousVideoLikeNavigation({"stage-id":stageElem, "hide-share-button":false, "hide-audio-button":false, "hide-full-screen-button":false});
         } else if(stageElem.querySelectorAll(".pp-selector-carousel-splash").length >0) {
-          pompousEventNotifier = new PompousCarouselNavigation({stageId:stageElem, hideShareButton:false});
+          pompousEventNotifier = new PompousCarouselNavigation({"stage-id":stageElem, "hide-share-button":false, "hide-audio-button":false, "hide-full-screen-button":false});
         } else if(stageElem.querySelectorAll(".pp-selector-no-navigation-splash").length >0) {
-          pompousEventNotifier = new PompousBlankNavigation({stageId:stageElem, hideShareButton:false});
+          pompousEventNotifier = new PompousBlankNavigation({"stage-id":stageElem});
         } else {
           console.warn("Found stage attribute data-skin=\"derive-from-html\", but could not derive the skin from the html within the stage element! Will use a \"blank\" skin.");
-          pompousEventNotifier = new PompousBlankNavigation({stageId:stageElem});
+          pompousEventNotifier = new PompousBlankNavigation({"stage-id":stageElem});
         }
     }
     
@@ -251,21 +251,21 @@ ppDocumentReady( () => {
     }
     
     // TODO: add documentation, copy from pp-player.js
-    // implement different skins and their attributes (e.g. "hideShareButton")
+    // implement different skins and their attributes (e.g. "hide-share-button")
     const pompousOptions = {
-        stageId: stageElem, 
-        autoStart: stageElem.getAttribute("data-auto-start") || true,
-        autoStartAudioMuted: stageElem.getAttribute("data-auto-start-audio-muted") || true,
-        autoRestartAtEnd: stageElem.getAttribute("data-auto-restart-at-end") || false,
-        autoRestartAtStart: stageElem.getAttribute("data-auto-restart-at-start") || false,
-        startBlank: stageElem.getAttribute("data-start-blank") || false,
-        designWidth: parseInt(stageElem.getAttribute("data-design-width")) || 1920,
-        designHeight: parseInt(stageElem.getAttribute("data-design-height")) || 1080,
-        stageBorderSize: parseInt(stageElem.getAttribute("data-stage-border-size")) || 0,
-        loadNImagesAhead: parseInt(stageElem.getAttribute("data-load-n-images-ahead")) || 5,
-        webfonts: webfontsObj,
-        pompousEventNotifier: pompousEventNotifier,
-        logLevel: parseInt(stageElem.getAttribute("data-log-level")) || 2,
+        "stage-id": stageElem, 
+        "auto-start": stageElem.getAttribute("data-auto-start") || true,
+        "auto-start-audio-muted": stageElem.getAttribute("data-auto-start-audio-muted") || true,
+        "auto-restart-at-end": stageElem.getAttribute("data-auto-restart-at-end") || false,
+        "auto-restart-at-start": stageElem.getAttribute("data-auto-restart-at-start") || false,
+        "start-blank": stageElem.getAttribute("data-start-blank") || false,
+        "design-width": parseInt(stageElem.getAttribute("data-design-width")) || 1920,
+        "design-height": parseInt(stageElem.getAttribute("data-design-height")) || 1080,
+        "stage-border-size": parseInt(stageElem.getAttribute("data-stage-border-size")) || 0,
+        "load-images-ahead": parseInt(stageElem.getAttribute("data-load-images-ahead")) || 5,
+        "web-fonts": webfontsObj,
+        "player-event-listener": pompousEventNotifier,
+        "log-level": parseInt(stageElem.getAttribute("data-log-level")) || 2,
      };
     const pompousPlayer = new PompousPlayer(pompousOptions);
     

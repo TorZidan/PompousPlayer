@@ -38,18 +38,17 @@ Most of the file content is boilerplate css and html code for the video-like nav
 // which does all the "wiring" below automagically. This attribute is not used in this example, so we have to properly initiallize 
 // the player ourselves. This is just another, more elaborate way of initializing the player.
 
-const pompousNavigation = new PompousVideoLikeNavigation({stageId:"#the-pompous-stage", hideShareButton:true});
+const pompousNavigation = new PompousVideoLikeNavigation({"stage-id":"#the-pompous-stage", "hide-share-button":true});
 const pompousOptions = {
-   autoStart: "true",
-   autoRestartAtEnd: false, 
-   startBlank: true,
-   designWidth: 1920,
-   designHeight: 1080,
-   stageId: "#the-pompous-stage",
-   loadNImagesAhead: 5,
-   webfonts: {},
-   pompousEventNotifier: pompousNavigation,
-   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+   "auto-start": "true",
+   "auto-restart-at-end": false, 
+   "design-width": 1920,
+   "design-height": 1080,
+   "stage-id": "#the-pompous-stage",
+   "load-images-ahead": 5,
+   "web-fonts": {},
+   "player-event-listener": pompousNavigation,
+   "log-level": 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
 };
 const pompousPlayer = new PompousPlayer(pompousOptions);
 

@@ -11,15 +11,16 @@ We call these "skins". Each file above is a full slideshow, with just one "slide
 
 How does it work?
 Look for the "skin" comments in the CSS and HTML sections of the files.
-Diff a couple of skin files to see the diff!
+Diff a couple of skin files to see the diff.
 Each skin is composed of CSS, HTML and Javascript code.
 
-Let's look at the "video-like" skin:
+Let's take a closer look at the "video-like" skin:
 It provides a video-like progress bar and play controls at the bottom of the presentation.
 
-- the html for the progress bar is in [skin-video-like-001.html](./skin-video-like-001.html). Look at the html code between the <!-- ================= Begin video-like-001 skin html ... --> comment and the <!-- ================= End video-like-001 skin html ================= --> comments. 
-- the CSS for this skin is in file [skin-video-like-001.css](./skin-video-like-001.css).
-- the javascript code for this skin is in file [pp-skins.js](../js/pp-skins.js), look for "class PompousVideoLikeNavigation".
+- the html for the progress bar is in [skin-video-like-001.html](./skin-video-like-001.html). Look at the html code between the `<!-- ================= Begin video-like-001 skin html ... -->` comment and the `<!-- ================= End video-like-001 skin html ================= -->` comment. This is boilerplate html code that you should copy/paste into your stage html element, after the actual presentation html content.
+- the CSS for this skin is in file [skin-video-like-001.css](./skin-video-like-001.css). You should include this CSS file in your presentation html file, like this: `<link rel="stylesheet" href=".path.to.file./skin-video-like-001.css" />`
+
+- the javascript code for this skin is in file [pp-skins.js](../js/pp-skins.js), look for "class PompousVideoLikeNavigation". You should include it into your presentation like this: `<script type="text/javascript" src=".path.to.file./js/pp-skins.js"></script>` or `<script type="text/javascript" src=".path.to.file./js/pp-all-in-one.min.js"></script>`
 
 The best part is: YOU CAN REUSE ALL OF THIS, WITHOUT HAVING TO CHANGE A SINGLE LINE OF CODE. Or you can tweak a skin to match your needs. The code is clean, simple, and easy to understand.
 

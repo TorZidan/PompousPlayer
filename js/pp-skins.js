@@ -376,7 +376,7 @@ class PompousVideoLikeNavigation {
     
     // Invoked at page load, once the document is ready:
     ppDocumentReady( () => {
-      var stageId = navigationOptions["stageId"];
+      var stageId = navigationOptions["stage-id"];
       if(stageId && (typeof stageId === 'string') && !stageId.startsWith('#') && !stageId.startsWith('.')) {
           stageId = "#" + stageId;
       }
@@ -414,15 +414,15 @@ class PompousVideoLikeNavigation {
       this.$playPauseResumeButton.css("cursor", "default");
       this.$playPauseResumeButton.css("opacity", 0.5);
       
-      if(this.$shareButton.length && (navigationOptions["hideShareButton"]===true || getPompousUrlParams()["hideShareButton"]==="true")) {
+      if(this.$shareButton.length && (navigationOptions["hide-share-button"]===true || getPompousUrlParams()["hide-share-button"]==="true")) {
         this.$shareButton.css("display", "none");
       } else {
         this.$shareButton.css("cursor", "pointer");
       }
-      if(navigationOptions["hideAudioButton"]===true || getPompousUrlParams()["hideAudioButton"]==="true") {
+      if(navigationOptions["hide-audio-button"]===true || getPompousUrlParams()["hide-audio-button"]==="true") {
         this.$audioOnOffButton.css("display", "none");
       }
-      if(navigationOptions["hideFullScreenButton"]===true || getPompousUrlParams()["hideFullScreenButton"]==="true") {
+      if(navigationOptions["hide-full-screen-button"]===true || getPompousUrlParams()["hide-full-screen-button"]==="true") {
         this.$fullScreenButton.css("display", "none");
       } else {
         this.$fullScreenButton.css("cursor", "pointer");
@@ -641,8 +641,8 @@ class PompousVideoLikeNavigation {
     this.pompousPlayer = thePompousPlayer;
     this.presentationOptions = presentationOptions;
     
-    if(presentationOptions["loadNImagesAhead"]!==0) {
-      this.$statusBar.html("Loading presentation ... "+this.imagesLoadedSoFar+ " images out of "+presentationOptions["loadNImagesAhead"]+ " loaded");
+    if(presentationOptions["load-images-ahead"]!==0) {
+      this.$statusBar.html("Loading presentation ... "+this.imagesLoadedSoFar+ " images out of "+presentationOptions["load-images-ahead"]+ " loaded");
     } else {
       this.$statusBar.html("Loading presentation ... ");
     }
@@ -1000,7 +1000,7 @@ class PompousCarouselNavigation {
     this.performanceFinishedBackwardBool = true;    
   
     ppDocumentReady( () => {
-      var stageId = navigationOptions["stageId"];
+      var stageId = navigationOptions["stage-id"];
       if(stageId && (typeof stageId === 'string') && !stageId.startsWith('#') && !stageId.startsWith('.')) {
           stageId = "#" + stageId;
       }
@@ -1024,19 +1024,18 @@ class PompousCarouselNavigation {
       this.$prevAnimationButton.css("opacity", 0.5);
       this.$nextAnimationButton.css("opacity", 0.5);
       
-      if(this.$shareButton.length && (navigationOptions["hideShareButton"]===true || getPompousUrlParams()["hideShareButton"]==="true")) {
+      if(this.$shareButton.length && (navigationOptions["hide-share-button"]===true || getPompousUrlParams()["hide-share-button"]==="true")) {
         this.$shareButton.css("display", "none");
       }
-      if(navigationOptions["hideAudioButton"]===true || getPompousUrlParams()["hideAudioButton"]==="true") {
+      if(navigationOptions["hide-audio-button"]===true || getPompousUrlParams()["hide-audio-button"]==="true") {
         this.$audioOnOffButton.css("display", "none");
       }
-      if(navigationOptions["hideFullScreenButton"]===true || getPompousUrlParams()["hideFullScreenButton"]==="true") {
+      if(navigationOptions["hide-full-screen-button"]===true || getPompousUrlParams()["hide-full-screen-button"]==="true") {
         this.$fullScreenButton.css("display", "none");
       }
       
       // Hide the share menu (if shown) on clicking outside of the share menu
-      // and
-      // the share button:
+      // and the share button:
       document.addEventListener("click", (e) => {
         const et = e.target;
         if(et && (et instanceof Node) && this.$shareMenu.length>0 && !this.$shareMenu.get(0).contains(et) && this.$shareButton.length && !this.$shareButton.get(0).contains(et)) {
@@ -1377,7 +1376,7 @@ class PompousBlankNavigation {
     this.$currentStateDiv = undefined;
     
     ppDocumentReady( () => {
-      var stageId = navigationOptions["stageId"];
+      var stageId = navigationOptions["stage-id"];
       if(stageId && (typeof stageId === 'string') && !stageId.startsWith('#') && !stageId.startsWith('.')) {
           stageId = "#" + stageId;
       }

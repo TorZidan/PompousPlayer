@@ -138,23 +138,22 @@ class PompousNavigationDispatcher {
 } // end of PompousNavigationDispatcher
 
 //We have one navigation object per "skin"; Even if a skin is currently "hidden", the player still dispatches notifications to it. 
-const pompousVideoLikeNavigation  = new PompousVideoLikeNavigation({stageId:"#the-pompous-stage", hideShareButton:true});
-const pompousCarouselNavigation   = new PompousCarouselNavigation({stageId:"#the-pompous-stage", hideShareButton:true});
-const pompousNoNavigation         = new PompousBlankNavigation({stageId:"#the-pompous-stage"});
+const pompousVideoLikeNavigation  = new PompousVideoLikeNavigation({"stage-id":"the-pompous-stage", "hide-share-button":false});
+const pompousCarouselNavigation   = new PompousCarouselNavigation({"stage-id":"the-pompous-stage", "hide-share-button":false});
+const pompousNoNavigation         = new PompousBlankNavigation({"stage-id":"the-pompous-stage"});
 const pompousNavigationDispatcher = new PompousNavigationDispatcher([pompousVideoLikeNavigation, pompousCarouselNavigation, pompousNoNavigation]);
 
 const pompousOptions = {
-   autoStart: "true",
-   autoStartAudioMuted: true,
-   autoRestartAtEnd: false, 
-   startBlank: true,
-   designWidth: 1920,
-   designHeight: 1080,
-   stageId: "#the-pompous-stage",
-   loadNImagesAhead: 5,
-   webfonts: {},
-   pompousEventNotifier: pompousNavigationDispatcher,
-   logLevel: 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
+   "auto-start": "true",
+   "auto-start-audio-muted": true,
+   "auto-restart-at-end": false, 
+   "design-width": 1920,
+   "design-height": 1080,
+   "stage-id": "#the-pompous-stage",
+   "load-images-ahead": 5,
+   "web-fonts": {},
+   "player-event-listener": pompousNavigationDispatcher,
+   "log-level": 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and above, 4 = DEBUG and above, meaning all.
 };
 const pompousPlayer = new PompousPlayer(pompousOptions);
 
@@ -167,7 +166,7 @@ function updateStageScaleToFitWidth(pompousPlayer) {
   const $theStageContainerDiv = $("#the-stage-container-div");
   const width = $theStageContainerDiv.width();
   const options = pompousPlayer.getOptions();
-  const newScale = width / options['designWidth'];  
+  const newScale = width / options["design-width"];  
   console.warn("Scaling stage to "+newScale);
   pompousPlayer.scaleStage(newScale);
 }
@@ -260,7 +259,7 @@ function changeSkin(skinName) {
 </head>
 <body>
   <div style="width:100%; height:50px; background-color: green;">
-    <div style="position:relative; left: 50%;  top:50%;  width: 100%;  height: 50px;  margin-left:-200px;  margin-top:-20px;">
+    <div style="position:relative; left: 50%;  top:50%;  width: 300px;  height: 50px;  margin-left:-200px;  margin-top:-20px;">
       Choose player skin: 
       <select onchange="changeSkin(this.value)">
         <option value="Video" selected>Like a video</option>

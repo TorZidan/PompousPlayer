@@ -8,7 +8,7 @@ By using HTML+CSS (instead of JS code) to define each presentation, it is extrem
 
 When we say "presentations", we don't mean the PowerPoint kind. We mean "videos" with slick animations of images, texts, short html5 videos and 3D panoramas.
 
-For the common user who is NOT developing an online presentation editing tool: You can create rich animated presentations without having to write a single line of JavaScript code (still, you may need basic JS knowledge). If you know CSS, you'll be right at home. 
+For the common user who is NOT developing an online presentation editing tool: You can create rich animated presentations without having to write a single line of JavaScript code! If you know CSS, you'll be right at home. 
 
 ## Contents
 * [Installation and Getting Started](#installation-and-getting-started)
@@ -59,6 +59,7 @@ Here are the major features of Pompous Player:
 - You can set a presentation to auto-loop forever, until you faint!
 - It supports mobile swipe left and right ("Swiper, No Swiping!").
 - It plays the same slideshow exactly the same in all major browsers, including mobile devices (but not on rotary phones); it's scaled proportionally, as needed, to fit every screen.
+- We even added support for "playing" (horizontal pan of) 3D panoramic images, using a third-party JS library.
 - The player javascript code is self-sufficient (does not require 3rd part libraries) and fits in one 50kB file (when minimized).
 - If you know CSS, you'll be right at home. All the slideshow CSS and html code is in your capable hands (not in our Javascript code).
 

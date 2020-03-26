@@ -3,7 +3,7 @@
 ## Is PompousPlayer open source? Is the JS source code available?
 No, it's not. Most use cases fall under the "free to use" license; some users may have to obtain a paid commercial license from us. See more [here](STANDARD_LICENSE). This licensing model gives us a sustainable future.
 While the "skins" Javascript source code is readily available, the "player" code is available only in minified (unreadable) form.
-The goal of this project is to enable YOU to build awesome presentations without having to know, read, or write Javascript code (aside from the boilerplate copy/paste code in each presentation).
+The goal of this project is to enable YOU to build awesome presentations without having to know, read, or write Javascript code.
 If you are interested in the full source code, it will be available to to you when you obtain a commercial license from us; see [https://www.pompousphotos.com/commercial_license](https://www.pompousphotos.com/commercial_license) for more info.
 
 ## How did you minifi the Javascript code?

@@ -5,16 +5,19 @@ The pompous player uses CSS transitions to animate things, as you normally would
 
 Normally, CSS transitions cannot be paused: You can either "pause" them in their initial position, end position, but not somewhere in between. We overcome this issue by feeding each animation slowly to the browser, at about 60 "frames" per second, using [requestAnimationFrame](https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame) :  a feature specifically designed for web browser animations, and supported for many years in all major browsers. See a nice performance comparison of the two approaches [here](https://developer.mozilla.org/en-US/docs/Web/Performance/CSS_JavaScript_animation_performance).
 
+The use of requestAnimationFrame also lets us apply css styles at the desired times, without using any setTimeout().
+
 All CSS transitions must be arranged in CSS classes; the player cannot "play" individual CSS styles. The player applies these classes at specific times. This data model (what classes to apply at what time) is specified in attribute "data-classes" on &lt;div&gt; (or other DOM) elements in the html code.
 The player parses this "model" and the CSS classes when the presentation web page loads (at "document ready"), and becomes ready to play.
 
 Unlike other online presentation software on the market which use a &lt;canvas&gt;, we don't draw on a &lt;canvas&gt;, which gives us improved performance.
+
 The player can't play animations defined as "@keyframes", and there is no need to do so . If you want, you can still use them, as you usually do, but those animations will not be pausable and "seekable" (being able to jump in time via the video progress bar), and you don't want that.   
 
 By feeding each CSS transition slowly to the browser, at 60 frames per second, we get some nice "freebies". For example, in addition to the standard "easing" functions (ease-in, sease-out, ease, etc) we can define our own custom easing functions that do anything we like, for example we can make a "scale from 0% to 100%" transition to bounce like jelly once it reaches towards the 100%.
 
 Again, here are the major features of Pompous Player:
-- It plays like a video, looks like a video, but it's just a set of images, styles and (optionally) short videos. As such, it loads much faster over slow internets.
+- It plays like a video, looks like a video, but it's just a set of images, styles and (optionally) short videos. As such, it loads much faster than videos over slow internets.
 - You can play/pause/resume the "video" at any moment; also, it pauses automatically when the browser tab becomes inactive.
 - You can jump to any offset in the "video" by clicking on, or dragging the progress bar (just like when playing a video).
 - You can use "fast forward/backward" buttons that can jump to "interesting" places (defined by you) in the "video".
@@ -41,31 +44,68 @@ A presentation consists of:
 - CSS styles for the presentation "skin" (e.g. video-like navigation bar at the bottom of the page). We've got some nice skins you can wear for free! No need to fret about this, unless you're picky.
 - CSS styles for the presentation animations: These could be stored directly in the html file in a &lt;style&gt; tag, or imported from a CSS file (NOTE: the origin of that file MUST be the same as the html file).
 - A &lt;script&gt; tag that imports the pompous player JS code.
-- A bunch of JS code to instantiate the presentation JS objects. If you just copy/paste from the demos, we've got you covered!
+- Either no JS code when using the "Zero Javascript code" way, or just a bunch of lines of JS code to instantiate the presentation JS objects. If you just copy/paste from the demos, we've got you covered!
 - Html code for the presentation visual elements (images, texts, videos, 3D panoramas). We've'got well defined best practices on this one, read on.
 - Html code for the "stage &lt;div&gt; and for the "skin". Ctrl +c/+v are your best friends.
 
-See these things in this [demo](demos/ZoomInOut.html).
+## The Javascript: Option 1: use the "Zero Javascript code" way (recommended)
 
-## The Javascript
+Note: By "Zero Javascript code" we mean that you don't need to write any JS code in your presentation. But you still need the &lt;script&gt; tag that imports the pompous player JS code.
+
+See this [demo](demos/3d-flip.html#L250).
+
+To enable this option, all you need to do is add the `"data-pompous-player-stage"` attribute to your "stage" html element, e.g.:
+`<div data-pompous-player-stage data-skin="derive-from-html" class="pompous-stage" tabindex="0">`. This instructs the player to auto-wire things for you.
+
+The data-skin="derive-from-html" instructs the player to figure out the player "skin" to be used, by inspecting the skin-related html code inside the stage <div>.
+Or, you can tell it exactly which skin to use: 
+- To use the "video-like" skin: `data-skin="video-like"`
+- To use the "carousel" skin: `data-skin="carousel"`
+- To use the "no navigation buttons" skin:  `data-skin="blank"`
+
+There are some more, optional attributes that can be added to the 'stage' &lt;div&gt; element to configure the presentation:
+
+```
+<div data-pompous-player-stage 
+  data-skin="derive-from-html|video-like|carousel|blank"    (the default is "derive-from-html")
+  data-auto-start="true|false|jump_to_1st_nonskippable|jump_to_time_0"   (the default is "true")
+  data-auto-start-audio-muted="true|false"   (the default is "true")
+  data-auto-restart-at-end="true|false"   (the default is "false")
+  data-auto-restart-at-start="true|false"   (the default is "false")
+  data-auto-restart-at-end="true|false"   (the default is "false")
+  data-design-width="<number>"   (in pixels, the default is "1920")
+  data-design-height="<number>"   (in pixels, the default is "1080")
+  data-stage-border-size="<number>"   (in pixels, the default is "0")
+  data-load-images-ahead="<number>"   (the default is "5")  
+  data-web-fonts='{"google": {"families":["Black And White Picture:400", "Gorditas:400"]}}'  (note the single-quotes; this is just an example of using two google fonts)
+  data-log-level="<number>"   (0 = none, 1 = ERROR, 2 = WARN and above  - this is default, 3 = INFO and above, 4 = DEBUG and above, meaning all)
+  class="pompous-stage" tabindex="0">
+```
+
+Note: The Javascript code that does this can be found in file [pp-dependencies.js](js/pp-dependencies.js#L213). It's quite simple and well readable.
+
+
+## The Javascript: Option 2: use Javascript to wire things together
+
+See this [demo](demos/ZoomInOut.html#L36).
 
 Here is the minimum JS code for a presentation:
 
 ```javascript
 <script>
 // Use the "like-a-video" skin:
-const pompousNavigation = new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false});
+const pompousNavigation = new PompousVideoLikeNavigation({"stage-id":"the-pompous-stage", "hide-share-button":false});
 
 const pompousOptions = {
-  // Required: The id of the "stage" div html element, 
+  // Required: The "selector" of the "stage" div html element, 
   // e.g. <div id="the-pompous-stage">...the...presentation..html...here...</div>
-  stageId: "the-pompous-stage",
-  autoStart: "true",
-  designWidth: 1920,
-  designHeight: 1080,
+  "stage-id": "#the-pompous-stage",
+  "auto-start": "true",
+  "design-width": 1920,
+  "design-height": 1080,
   // ... some more presentation options here ...
   // Important: Let the player know about the skin navigation object, so that it can call functions on it, at will:
-  pompousEventNotifier: pompousNavigation,
+  "player-event-listener": pompousNavigation,
 };
 
 // This will also initialize the Pompous Player at the right time (at page load, upon "document ready"):
@@ -84,11 +124,11 @@ Note: The code above can be written in even more condensed way:
 ```javascript
 <script>
 const pompousPlayer = new PompousPlayer({
-  stageId: "the-pompous-stage",
-  autoStart: "true",
-  designWidth: 1920,
-  designHeight: 1080,
-  pompousEventNotifier: new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false}),
+  "stage-id": "#the-pompous-stage",
+  "auto-start": "true",
+  "design-width": 1920,
+  "design-height": 1080,
+  "player-event-listener": new PompousVideoLikeNavigation({"stage-id":"#the-pompous-stage", "hide-share-button":false}),
 });
 window.addEventListener( "resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
 // Then, optionally, add a mobile swipe listener (not shown, but you can see it in the demos)
@@ -102,8 +142,6 @@ The code gets executed when the presentation web page loads, even before the "do
 The PompousPlayer is defined in file [js/pp-player.min.js](js/pp-player.min.js) and in [js/pp-all-in-one.min.js](js/pp-all-in-one.min.js) ; You can use either.
 The PompousVideoLikeNavigation contains the JS code for the video-like skin. It is in file [js/pp-skins.js](js/pp-skins.js) and in [js/pp-all-in-one.min.js](js/pp-all-in-one.min.js) ; You can use either. 
 
-## The presentation options
-
 The presentation "options" object is just a plain old JS object with a few name/value pairs. 
 
 Below we list all player options and their default values (if you don't specify any option yourself, the default value below will be used).
@@ -112,74 +150,61 @@ Only the first two options are required : 'stageId' and 'pompousEventNotifier'; 
 ```javascript
 const pompousOptions = {
       // Required: The id of the "stage" div html element, 
-      // e.g. "stageId": "the-pompous-stage"      
+      // e.g. "stageId": "#the-pompous-stage"      
       // for <div id="the-pompous-stage">...the...presentation..html...here...</div>
-      "stageId": undefined,
+      "stage-id": undefined,
       
-      // Required. The "skin" JS code, 
-      // e.g. pompousEventNotifier: new PompousVideoLikeNavigation({stageId:"the-pompous-stage", hideShareButton:false}),
-      "pompousEventNotifier": undefined,
+      // Required. Sets up the "skin" JS code to receive events from the player, 
+      // e.g. "player-event-listener": new PompousVideoLikeNavigation({stageId:"the-pompous-stage", "hide-share-button":false}),
+      "player-event-listener": undefined,
       
       // - "false": Do not start playing on page load. Keep the stage div's CSS style "visibility:hidden" until the user requests play.
       // - "true": Start playing as soon as the web page loads:
       // - "jump_to_1st_nonskippable": Once the web page loads, jumps to the beginning of the 1st non-skippable animation and pauses.
       // - "jump_to_time_0": Once the web page loads, plays the animation at time 0, and pauses.
-      "autoStart": "true",
-      
-      // If set to "true": When the end was reached while playing forward,
-      // then wait 2 seconds, and then restart playing from the start, forward.
-      "autoRestartAtEnd":false,
-      
-      // could be a bit confusing: If set to "true", when playing backwards and
-      // the start was reached,
-      // then wait 2 seconds, and then reverse the play direction and start
-      // playing forward, from the start.
-      "autoRestartAtStart": false,
-      
-      // Not documented: Shows a blank screen before starting auto- or manual- playing
-      // v.s. show the 1st slide image before starting auto- or manual- playing
-      "startBlank": true,
-      
-      // The following stage div width and height was used when designing the presentation.
-      // Now that we know this, we can scale the stage div up/down as needed to fit all screens,
-      // like the way a video does. 
-      // Most phones and TVs have 16:9 screen ratio. 1920x1080 = 16:9 = Full HD, 1080p ;
-      "designWidth": 1920,      
-      "designHeight": 1080,
-      
-      // Border size to leave on each of the four sides, in pixels. Used when
-      // calculating the stage scale.
-      "stageBorderSize": 0, 
-      
-      // Allows specifying an audio track for the presentation.
-      // e.g. audio: "https://.... my-audio.mp3"
-      // The audio is synchronized with the "play" at all times.
-      "audio":undefined,
+      "auto-start": "true",
       
       // When autoStart is true: We have a choice to mute the audio ("true"
       // means it's muted), or not (which may cause bad user experience)      
       // Avoid changing this, as the Chrome browser won't let you anyways. See more here:
       // https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
-      "autoStartAudioMuted":true,
+      "auto-start-audio-muted":true,
       
-      // When the audio track ends but the presentation is not over, loop the audio
-      // again and again:
-      "audioAutoLoop":true,
+      // If set to "true": When the end was reached while playing forward,
+      // then wait 2 seconds, and then restart playing from the start, forward.
+      "auto-restart-at-end":false,
+      
+      // could be a bit confusing: If set to "true", when playing backwards and
+      // the start was reached,
+      // then wait 2 seconds, and then reverse the play direction and start
+      // playing forward, from the start.
+      "auto-restart-at-start": false,
+      
+      // The following stage div width and height was used when designing the presentation.
+      // Now that we know this, we can scale the stage div up/down as needed to fit all screens,
+      // like the way a video does. 
+      // Most phones and TVs have 16:9 screen ratio. 1920x1080 = 16:9 = Full HD, 1080p ;
+      "design-width": 1920,      
+      "design-height": 1080,
+      
+      // Border size to leave on each of the four sides, in pixels. Used when
+      // calculating the stage scale.
+      "stage-border-size": 0, 
       
       // List here the fonts to be used in this presentation.
       // For more info, see https://github.com/typekit/webfontloader
       // Example: webfonts: {"google": {"families": ["Cute Font:400", ]},},
-      "webfonts":undefined,
+      "web-fonts":undefined,
       
       // The browser will load these N images during init, BEFORE starting playing.
       // As soon as it starts playing, it will load all remaining images.
       // -1 means "wait for all images to load before playing presentation"; 
       //  0 means "don't wait for any images to load".
-      "loadNImagesAhead": 10,
+      "load-images-ahead": 10,
       
       // Useful for JS debugging. Enables logging of log messages through the
       // code into the browser console.
-      "logLevel": 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and
+      "log-level": 2, // 0 = none, 1 = ERROR, 2 = WARN and above, 3 = INFO and
                      // above, 4 = DEBUG and above, meaning all.
     };
 ```
@@ -191,7 +216,7 @@ Consider the following html code:
 
 ```html
 <body>
-  <div id="the-pompous-stage" class="pompous-stage" tabindex="0">
+  <div data-pompous-player-stage data-skin="derive-from-html" class="pompous-stage" tabindex="0">
     <div class="initially-hidden" data-classes="show delay-1.5s, hide delay-3.5s"></div>      
   </div>
 </html>
