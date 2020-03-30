@@ -16,7 +16,7 @@
   cursor:pointer;
   user-select: none;
 }
-.pompous-carousel-001:hover circle {
+.pompous-carousel-001-button circle:hover {
   stroke-width:40;
    cursor:pointer;
 }

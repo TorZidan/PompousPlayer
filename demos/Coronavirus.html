@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+<title>Stay safe at home during the coronavirus outbreak!</title>
+
+<script type="text/javascript" src="https://www.pompousphotos.com/js/pompous-player/26/pp-all-in-one.min.js"></script>
+
+<style>
+/* ================= "Skin" css begin ================= */
+.pompous-carousel-001-button {
+  position: absolute;
+  cursor: pointer;
+  user-select: none;
+}
+
+circle:hover {
+  stroke-width: 40;
+  cursor: pointer;
+}
+.pompous-carousel-001-top-buttons {
+  top: 10px; 
+  width: 50px; 
+  height: 50px;
+}
+
+.pompous-carousel-001-play-pause-resume-button {
+  right:30px;
+}
+.pompous-carousel-001-full-screen-button {
+  right:90px;
+}
+/* ================= "Skin" css end ================= */
+
+
+/* ================= Stage css begin ================= */
+
+/* Optional: normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
+html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:block}h1{font-size:2em;margin:.67em 0}hr{box-sizing:content-box;height:0;overflow:visible}pre{font-family:monospace,monospace;font-size:1em}a{background-color:transparent}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:bolder}code,kbd,samp{font-family:monospace,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;line-height:1.15;margin:0}button,input{overflow:visible}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{padding:.35em .75em .625em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}progress{vertical-align:baseline}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}details{display:block}summary{display:list-item}template{display:none}[hidden]{display:none}
+
+/* 
+   Position the stage div in the middle of the screen, and get it ready for scaling on windows resizes.
+   The most important style is position: absolute; most others are by default.
+   The width and height are irrelevant: they are overwritten later.
+*/
+.pompous-stage {
+  all: initial;
+  position: absolute;
+  width: 800px;
+  height: 0px;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  margin: auto;
+  overflow: hidden;
+  z-index: 1;
+  transform: translate(-50%, -50%) scale(1.0);
+  transform-origin: center center;
+  outline: none;
+  /* prevent selecting the button icons and text on double-click: */
+  -webkit-user-select: none;        
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  perspective: 1000px;
+  background-color: black;
+}
+
+/* ================= Slideshow css begin ================= */
+
+/* Animate the opacity from 0 to 1 for 1 seconds */
+.fade-in
+{
+  visibility: visible;
+  --pp-opacity-from: 0;
+  opacity: 1;
+  transition-property: opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 1s;
+}
+
+.show
+{
+  visibility: visible;
+}
+
+.bounceInRight
+{
+  transition-property: transform;
+  --pp-transform-from: translateX(1000px);
+  transform: translateX(0px);
+  --pp-transition-timing-function: easeOutBack;
+  --pp-transition-precision: 4;
+  transition-duration: 1.5s;
+}
+
+.rotateInLeft
+{
+  transition-property: transform;
+  --pp-transform-from: translateX(-1000px) rotate(0deg);
+  transform: translateX(0px) rotate(1800deg);
+  --pp-transition-timing-function: easeOutBack;
+  --pp-transition-precision: 4;
+  transition-duration: 2.0s;
+}
+
+.flipIn
+{
+  transition-property: transform;
+  --pp-transform-from: perspective(400px) rotateY(-360deg);
+  transform: perspective(400px) rotateY(0deg);
+  --pp-transition-timing-function: easeOutCubic;
+  --pp-transition-precision: 4;
+  transition-duration: 1.5s;
+}
+
+.flipInX
+{
+  transition-property: transform;
+  --pp-transform-from: perspective(400px) rotateX(90deg);
+  transform: perspective(400px) rotateX(0deg);
+  --pp-transition-timing-function: easeOutBounce;
+  --pp-transition-precision: 4;
+  transition-duration: 1s;
+}
+
+.bounceInLeft
+{
+  transition-property: transform;
+  --pp-transform-from: translateX(-1000px);
+  transform: translateX(0px);
+  --pp-transition-timing-function: easeOutBack;
+  --pp-transition-precision: 4;
+  transition-duration: 1.5s;
+}
+
+.text-stay
+{
+  position: absolute;
+  visibility: hidden;
+  top: 163px;
+  left: 355px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1;
+  border-style: none;
+}
+
+.text-safe
+{
+  position: absolute;
+  visibility: hidden;
+  top: 0px;
+  left: 496px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1.1;
+  border-style: none;
+  color: green;
+}
+
+.text-at-home
+{
+  position: absolute;
+  visibility: hidden;
+  top: 474px;
+  left: 68px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1;
+  border-style: none;  
+}
+
+.text-during-the
+{
+  position: absolute;
+  visibility: hidden;
+  top: 628px;
+  left: 505px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1;
+  border-style: none;
+}
+
+.text-outbreak
+{
+  position: absolute;
+  visibility: hidden;
+  top: 0px;
+  left: 1078px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 0.9;
+  border-style: none;
+}
+
+
+.text-coronavirus
+{
+  position: absolute;
+  visibility: hidden;
+  top: -7px;
+  left: 870px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1;
+  border-style: none;
+  color:red;
+}
+
+.text-exclamation
+{
+  position: absolute;
+  visibility: hidden;
+  top: 900px;
+  left: 1180px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 142px;
+  text-align: left;
+  color: #0ea8cc;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1;
+  border-style: none;
+  color: red;
+}
+
+/* ================= Slideshow css end ================= */
+</style>
+
+</head>
+<body>
+  <!-- ================= The "stage" div contains all animated content and the "skin" buttons: ================= -->
+  <div data-pompous-player-stage
+    data-skin="carousel"
+    data-web-fonts='{"google": {"families":["Srisakdi:700"]}}'
+    class="pompous-stage" tabindex="0">
+    
+    <!-- Begin animated content html -->
+    <div data-class-initial="text-stay" data-classes="show bounceInRight delay-1.0s">Stay</div>
+    <div data-class-initial="text-at-home" data-classes="show bounceInLeft delay-1.0s">at home</div>
+    <div data-class-initial="text-safe" data-classes="fade-in flipIn delay-1.7s">s
+a
+f
+e
+    </div>
+    
+    <div data-class-initial="text-during-the" data-classes="show bounceInRight delay-2.0s">during the</div>
+    <div data-class-initial="text-coronavirus" data-classes="fade-in flipInX delay-3.1s">coronavirus</div>
+    <div data-class-initial="text-outbreak" data-classes="fade-in flipIn delay-3.7s">o
+u
+t
+b
+r
+e
+a
+k
+    </div>
+    <div data-class-initial="text-exclamation" data-classes="show rotateInLeft delay-4s">!</div>
+    <!-- End animated content html -->
+   
+    <!-- Begin "skin" html (has just two buttons: Play/pause/rewind and Full-Screen-on-off -->
+    <!-- Play/pause/rewind button -->
+    <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onmousedown="getPpPlayer(event).togglePlayPauseResumeRewind(true)">
+      <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+        <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
+        <#-- The triangle of the "play" button: -->
+        <polygon class="pp-selector-play" points="6622,6080 10142,8000 6622,9920" fill="white"></polygon>
+        <path class="pp-selector-play" d="M353.661,237.879l-154.174-89.594c-16.844-9.969-32.987-1.938-32.987,17.844v179.766c0,19.75,16.143,27.797,32.987,17.812 l152.956-89.578C369.348,264.16,370.552,247.848,353.661,237.879z"/>
+        <#-- The two rectangles of the "pause" button: -->
+        <g class="pp-selector-pause" style="display:none" transform="translate(16,20)">
+          <path d="M201.654,127.525h-31.9c-10.557,0-19.125,8.645-19.125,19.125v184.9c0,10.558,8.645,19.125,19.125,19.125h31.9
+            c10.557,0,19.125-8.645,19.125-19.125v-184.9C220.779,136.094,212.211,127.525,201.654,127.525z"/>
+          <path d="M308.448,127.525h-31.9c-10.558,0-19.125,8.645-19.125,19.125v184.9c0,10.558,8.645,19.125,19.125,19.125h31.9
+            c10.557,0,19.125-8.645,19.125-19.125v-184.9C327.573,136.094,318.929,127.525,308.448,127.525z"/>
+        </g>
+        <path class="pp-selector-rewind" style="display:none" stroke-width="12" d="M370.906,311.188L401.594,256h-19.188c-0.797-72.344-56.625-127.516-126.781-127.609
+    c-70.609-0.078-127.766,57.078-127.672,127.688c0.078,70.625,57.359,127.905,127.969,127.969
+    c39.875,0.095,75.406-18.125,98.797-46.625l-15.281-25.483c-17.938,27.016-48.641,44.75-83.562,44.703
+    c-55.469-0.031-100.484-45.048-100.531-100.531c-0.062-55.484,44.844-100.375,100.312-100.312
+    c55.219,0.094,99.078,45.781,99.547,100.203l-19.047-0.031L370.906,311.188z"/>
+      </svg>
+    </div>
+  
+    <!--  Full Screen on/off button -->
+    <div class="pompous-carousel-001-button pompous-carousel-001-full-screen-button pp-selector-full-screen-button pompous-carousel-001-top-buttons" onmousedown="getPpPlayer(event).toggleFullScreen()">
+      <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+        <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />        
+        <g class="pp-selector-full-screen-on" style="display: block;">
+          <polygon points="368,224 368,144 288,144 312,168 272,208 304,240 344,200"/>            
+          <polygon points="144,288 144,368 224,368 200,344 240,304 208,272 168,312"/>
+        </g>
+        <g class="pp-selector-full-screen-off" style="display: none;">
+          <polygon points="327.984,215.984 367.984,176 335.984,143.984 296,183.984 272,159.984 272,240 351.984,240"/>
+          <polygon points="183.984,296 143.984,336.016 175.984,368.016 215.984,328.016 240,352.016 240,272 159.984,272"/>
+        </g>
+      </svg>
+    </div>
+    <!-- End "skin" html -->
+  </div>
+</body>
+</html>

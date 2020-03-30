@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width,shrink-to-fit=no,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="description" content="Play awesome slideshows with the Pompous Player. Watch and learn at https://github.com/TorZidan/PompousPlayer">
+<title>Hello Pompous World </title>
+
+<!-- A very simple presentation with one "actor" with two animations. 
+     For simplicity, there is no "skin". The only external resources are:
+    - The pompous player Javascript file
+    - The Google web font Srisakdi:700
+-->
+
+<script type="text/javascript" src="../js/pp-all-in-one.min.js"></script>
+
+<style>
+.pompous-stage {
+  all: initial;
+  position: absolute;
+  width: 800px;
+  height: 0px;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  margin: auto;
+  overflow: hidden;
+  z-index: 1;
+  transform: translate(-50%, -50%) scale(1.0);
+  transform-origin: center center;
+  outline: none;
+  -webkit-user-select: none;        
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  perspective: 1000px;
+  background-color: lightgray;
+}
+
+.text-initial {
+  position: absolute;
+  visibility: hidden;
+  top: 350px;
+  left: 130px;
+  width: auto;
+  height: auto;
+  padding: 0px 20px 0px 20px;
+  font-family: 'Srisakdi';
+  font-weight: 700;
+  font-style: normal;
+  font-size: 300px;
+  text-align: left;
+  white-space: pre;
+  word-break: break-word;
+  line-height: 1.1;
+  border-style: none;
+  color: black;
+}
+
+.unblur {
+  visibility: visible;
+  
+  --pp-filter-from: blur(12px);
+  filter: blur(0px);
+  
+  --pp-opacity-from: 0;
+  opacity: 1;
+  
+  transition-property: filter, opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 2s;
+}
+
+.blur {  
+  --pp-filter-from: blur(0px);
+  filter: blur(12px);
+  
+  --pp-opacity-from: 1;
+  opacity: 0;
+  
+  transition-property: filter, opacity;
+  transition-timing-function: ease-out;
+  transition-duration: 2s;
+}
+
+</style>
+
+</head>
+<body>
+  <div data-pompous-player-stage data-skin="none" data-web-fonts='{"google": {"families":["Srisakdi:700"]}}' class="pompous-stage" tabindex="0">
+    <div class="text-initial" data-classes="unblur delay-0s, blur delay-5s">hello world!</div>
+    <!-- There is no "skin" in this example, for brevity. -->
+  </div>
+</body>
+</html>

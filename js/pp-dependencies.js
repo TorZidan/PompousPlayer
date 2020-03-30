@@ -241,12 +241,12 @@ ppDocumentReady( () => {
         }
     }
     
-    const webfontsStr = stageElem.getAttribute("data-webfonts") || "{}";
+    const webfontsStr = stageElem.getAttribute("data-web-fonts") || "{}";
     var webfontsObj;
     try{
       webfontsObj = JSON.parse(webfontsStr);
     } catch(e) {
-      console.warn("Could not parse value in attribute data-webfonts=\""+webfontsStr+"\"! Will use {} (an empty set of webfonts) instead. The error is: "+e);
+      console.warn("Could not parse value in attribute data-web-fonts=\""+webfontsStr+"\"! Will use {} (an empty set of webfonts) instead. The error is: "+e);
       webfontsObj = {};
     }
     
@@ -258,7 +258,6 @@ ppDocumentReady( () => {
         "auto-start-audio-muted": stageElem.getAttribute("data-auto-start-audio-muted") || true,
         "auto-restart-at-end": stageElem.getAttribute("data-auto-restart-at-end") || false,
         "auto-restart-at-start": stageElem.getAttribute("data-auto-restart-at-start") || false,
-        "start-blank": stageElem.getAttribute("data-start-blank") || false,
         "design-width": parseInt(stageElem.getAttribute("data-design-width")) || 1920,
         "design-height": parseInt(stageElem.getAttribute("data-design-height")) || 1080,
         "stage-border-size": parseInt(stageElem.getAttribute("data-stage-border-size")) || 0,

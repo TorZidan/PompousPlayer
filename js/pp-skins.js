@@ -430,13 +430,16 @@ class PompousVideoLikeNavigation {
       
       // Disable touch events on the navigation bar
       ["touchstart", "touchmove", "touchend"].forEach( (e) => {
-        this.$sliderNavigationDiv.get(0).addEventListener(e,  (e) => {
+        if(this.$sliderNavigationDiv.length) {
+          this.$sliderNavigationDiv.get(0).addEventListener(e,  (e) => {
             e.stopPropagation();
-        });
+          });
+        }
       });
       
       ["mousedown", "touchstart"].forEach( (e) => {
-        this.$progressHandleDiv.get(0).addEventListener(e,  (e) => {
+        if(this.$progressHandleDiv.length) {
+          this.$progressHandleDiv.get(0).addEventListener(e,  (e) => {
             e.stopPropagation();
             this.draggingTheProgressHandle = true;    
             // console.info("Progress handle dragging started.");
@@ -446,8 +449,8 @@ class PompousVideoLikeNavigation {
               this.pompousPlayer.togglePlayPauseResume(undefined);
               this.resumePlayAfterProgressHandleDragComplete = true;
             }
-          }
-        );
+          });
+        }
       });
       
       ["mousemove", "touchmove"].forEach( (e) => {
@@ -469,28 +472,32 @@ class PompousVideoLikeNavigation {
       });
       
       // Do not propagate clicks on the progress handle:
-      this.$progressHandleDiv.get(0).addEventListener("click",  (e) => {
-        e.stopPropagation();
-      });
+      if(this.$progressHandleDiv.length) {
+        this.$progressHandleDiv.get(0).addEventListener("click",  (e) => {
+          e.stopPropagation();
+        });
+      }
       
       // Clicks on the progress bar should cause fast-forward or rewind:
-      this.$progressContainerDiv.get(0).addEventListener("click",  (e) => {
-        if(!this.pompousPlayer) {
-          return;
-        }
-        var jumpToHorizOffsetPx = e.pageX - this.$progressContainerDiv.offset().left;
-        if(jumpToHorizOffsetPx < 10) {
-          jumpToHorizOffsetPx = 0;
-        } else if(jumpToHorizOffsetPx > this.$progressContainerDiv.width() - 2) {
-          jumpToHorizOffsetPx = this.$progressContainerDiv.width();
-        }
-        const jumpToPercent = 100.0 * jumpToHorizOffsetPx / this.$progressContainerDiv.width();
-        // console.info("Progress bar clicked.
-        // jumpToHorizOffsetPx="+jumpToHorizOffsetPx+";
-        // jumpToPercent="+jumpToPercent);
-        this.$progressHandleDiv.css("left", jumpToHorizOffsetPx+"");      
-        this.pompousPlayer.jumpTo(jumpToPercent, null);
-      });
+      if(this.$progressContainerDiv.length) {
+        this.$progressContainerDiv.get(0).addEventListener("click",  (e) => {
+          if(!this.pompousPlayer) {
+            return;
+          }
+          var jumpToHorizOffsetPx = e.pageX - this.$progressContainerDiv.offset().left;
+          if(jumpToHorizOffsetPx < 10) {
+            jumpToHorizOffsetPx = 0;
+          } else if(jumpToHorizOffsetPx > this.$progressContainerDiv.width() - 2) {
+            jumpToHorizOffsetPx = this.$progressContainerDiv.width();
+          }
+          const jumpToPercent = 100.0 * jumpToHorizOffsetPx / this.$progressContainerDiv.width();
+          // console.info("Progress bar clicked.
+          // jumpToHorizOffsetPx="+jumpToHorizOffsetPx+";
+          // jumpToPercent="+jumpToPercent);
+          this.$progressHandleDiv.css("left", jumpToHorizOffsetPx+"");      
+          this.pompousPlayer.jumpTo(jumpToPercent, null);
+        });
+      }
   
       // On mouse up, if dragging the progress handle, jump the play to the new
       // position:
@@ -517,8 +524,10 @@ class PompousVideoLikeNavigation {
       
       // Needed so that we don't hide the mouse if it's inside the navigation
       // div:
-      this.$sliderNavigationDiv.get(0).onmouseenter = (e) => {this.isMouseInNavigationDiv=true;};
-      this.$sliderNavigationDiv.get(0).onmouseleave = (e) => {this.isMouseInNavigationDiv=false;};
+      if(this.$sliderNavigationDiv.length) {
+        this.$sliderNavigationDiv.get(0).onmouseenter = (e) => {this.isMouseInNavigationDiv=true;};
+        this.$sliderNavigationDiv.get(0).onmouseleave = (e) => {this.isMouseInNavigationDiv=false;};
+      }
       
       // Auto-hide the bottom navigation menu during playing:
       this.$stage.get(0).onmousemove = (e) => {
@@ -1045,24 +1054,34 @@ class PompousCarouselNavigation {
       
       // Disable touch events on the navigation buttons:
       ["touchstart", "touchmove", "touchend"].forEach( (e) => {
-        this.$playPauseResumeButton.get(0).addEventListener(e,  (e) => {
-            e.stopPropagation();
-        });
-        this.$prevAnimationButton.get(0).addEventListener(e,  (e) => {
-          e.stopPropagation();
-        });
-        this.$nextAnimationButton.get(0).addEventListener(e,  (e) => {
-          e.stopPropagation();
-        });
-        this.$audioOnOffButton.get(0).addEventListener(e,  (e) => {
-          e.stopPropagation();
-        });
-        this.$fullScreenButton.get(0).addEventListener(e,  (e) => {
-          e.stopPropagation();
-        });
+        if(this.$playPauseResumeButton.length) {
+          this.$playPauseResumeButton.get(0).addEventListener(e,  (event) => {
+            event.stopPropagation();
+          });
+        }
+        if(this.$prevAnimationButton.length) {
+          this.$prevAnimationButton.get(0).addEventListener(e,  (event) => {
+            event.stopPropagation();
+          });
+        }
+        if(this.$nextAnimationButton.length) {
+          this.$nextAnimationButton.get(0).addEventListener(e,  (event) => {
+            event.stopPropagation();
+          });
+        }
+        if(this.$audioOnOffButton.length) {
+          this.$audioOnOffButton.get(0).addEventListener(e,  (event) => {
+            event.stopPropagation();
+          });
+        }
+        if(this.$fullScreenButton.length) {
+          this.$fullScreenButton.get(0).addEventListener(e,  (event) => {
+            event.stopPropagation();
+          });
+        }
         if(this.$shareButton.length) {
-          this.$shareButton.get(0).addEventListener(e,  (e) => {
-            e.stopPropagation();
+          this.$shareButton.get(0).addEventListener(e,  (event) => {
+            event.stopPropagation();
           });
         }
       });
