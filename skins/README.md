@@ -59,7 +59,7 @@ PompousNavigationInterface.prototype.performanceFinished = function() {};
 PompousNavigationInterface.prototype.performanceFinishedBackward = function() {};
 PompousNavigationInterface.prototype.fullScreenChanged = function(a) {};
 PompousNavigationInterface.prototype.toggleShowHideShareMenu = function(event) {};
-PompousNavigationInterface.prototype.copyPresentationUrlToClipboard = function() {};
+PompousNavigationInterface.prototype.copyPresentationUrlToClipboard = function(url) {};
 PompousNavigationInterface.prototype.shareViaGmail = function() {};
 ```
 Note: what you see above is a set of google closure compiler "externs" that we use to [closure-compile](https://github.com/google/closure-compiler/) the code in [pp-skins.js](../js/pp-skins.js). 

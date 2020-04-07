@@ -60,8 +60,36 @@ window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str,key,value
 function getPompousUrlParams() {return pompousUrlParams;}
 window['getPompousUrlParams'] = getPompousUrlParams;
 
+// Gets the element's width, similar to jQuery width() method.
+// See jQuery source code in https://github.com/jquery/jquery/blob/master/src/dimensions.js
+function ppWidth(el){
+  // return $(el).width();
+  
+  //On Chrome for iOS the outerWidth and outerHeight are both 0, hence using the innerWidth, innerHeight.
+  // When running in an iframe: use innerWidth, innerHeight, because the "outer" dimensions are bad (on chrome mobile).
+  // On other browsers: choose the smaller of (innerWidth, outerWidth). Works nice on Chrome for desktop and android:
+  // return (window.outerWidth==0 || isInIframeBool)?  window.innerWidth  : Math.min(window.innerWidth, window.outerWidth);
+  
+  const styles=getComputedStyle(el);
+  // remove the 'px' from the returned values
+  const paddingLeft = styles['padding-left'].slice(0,-2);
+  const paddingRight= styles['padding-right'].slice(0,-2);
+  return el.clientWidth - paddingLeft - paddingRight;
+}
+
+function ppHeight(el){
+  // May return 0, which is undesirable:
+  // return $(el).height();
+  
+  // return (window.outerHeight==0  || isInIframeBool)? window.innerHeight : Math.min(window.innerHeight, window.outerHeight);
+
+  const styles=getComputedStyle(el);
+  const paddingTop = styles['padding-top'].slice(0,-2);
+  const paddingBottom= styles['padding-bottom'].slice(0,-2);
+  return el.clientHeight - paddingTop - paddingBottom;
+}
 /**
- * Should be invoked on init and on each window resize / phone orientation flip (it happens even when
+ * Should be invoked after init and on each window resize / phone orientation flip (it happens even when
  * you scroll/slide down in mobile Chrome to hide the address bar). Scales the
  * stage element to fit BOTH the width and height of the available window/iframe
  * (the way a video does). Note: If someone is directly embedding a presentation
@@ -98,6 +126,32 @@ function updateStageScaleToFitWidthAndHeight(pompousPlayer, optionalMaxWidthInPi
       newScale = (wh-options["stage-border-size"]*2) / options["design-height"];
     }
     newScale = Math.round(newScale * 100) / 100;
+    console.warn("ww="+ww+", wh="+wh+" newScale="+newScale);
+    pompousPlayer.scaleStage(newScale);
+  }
+}
+
+/**
+ * Similar to updateStageScaleToFitWidthAndHeight() above, but fits the window width only.
+ * If the window is not tall enough, a vertical scroll bar will appear .
+ */
+function updateStageScaleToFitWidth(pompousPlayer, optionalMaxWidthInPixels) {
+  if(pompousPlayer.isInFullScreen()) {
+    // Do nothing in full screen.It's handled by the player code.
+    return;
+  }
+  
+  const ww = ppWidth(document.documentElement);
+  const wh = ppHeight(document.documentElement);
+  const options = pompousPlayer.getOptions();
+  
+  if(optionalMaxWidthInPixels!==undefined && ww>=(optionalMaxWidthInPixels+options["stage-border-size"]*2)) {
+    // The browser window is larger than the desired size. No need to scale anything. Apply a fixed scale:
+    var newScale = (optionalMaxWidthInPixels+options["stage-border-size"]*2)/options["design-width"];    
+    pompousPlayer.scaleStage(newScale);
+  } else {
+    // The common use case:
+    newScale = (ww-options["stage-border-size"]*2) / options["design-width"];
     pompousPlayer.scaleStage(newScale);
   }
 }
@@ -269,11 +323,38 @@ ppDocumentReady( () => {
     const pompousPlayer = new PompousPlayer(pompousOptions);
     
     pompousPlayer.init();
-    // TODO: support "fit width" and "fit width and height":
-    updateStageScaleToFitWidthAndHeight(pompousPlayer);
     
-    // On each window resize: resize the stage div element to fit the window/iframe width AND height:
-    window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
+    const fitMode = stageElem.getAttribute("data-auto-resize") || "width-and-height";
+    if(fitMode==="width-and-height") {
+      //Scale the stage div element to fit the window width and height
+      updateStageScaleToFitWidthAndHeight(pompousPlayer);
+      
+      // On each window resize: resize the stage div element to fit the window/iframe width AND height:
+      window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
+      
+      setTimeout(() => {
+        // Do another scale after 10ms, as a workaround of a Chrome bug on desktop:
+        updateStageScaleToFitWidthAndHeight(pompousPlayer);
+      }, 10);
+    } else if(fitMode==="width") {
+      //Scale the stage div element to fit the window width
+      updateStageScaleToFitWidth(pompousPlayer);
+      
+      // On each window resize: resize the stage div element to fit the window/iframe width:
+      window.addEventListener("resize", () => {updateStageScaleToFitWidth(pompousPlayer)});
+      
+      setTimeout(() => {
+        // Do another scale after 10ms, as a workaround of a Chrome bug on desktop:
+        updateStageScaleToFitWidth(pompousPlayer);
+      }, 10);
+    } else if(fitMode==="none") {
+      // do nothing 
+    } else {
+      console.warn("Unknown value in stage attribute 'data-auto-resize':'"+fitMode+"'! Will use 'none'.");
+    }
+        
+    
+    
     
     // Setup mobile swipe/touch actions:
     if(pompousEventNotifier instanceof PompousVideoLikeNavigation) {

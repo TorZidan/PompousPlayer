@@ -33,6 +33,36 @@ circle:hover {
 .pompous-carousel-001-full-screen-button {
   right:90px;
 }
+
+.pompous-carousel-001-share-button {
+  right:150px;
+}
+
+.pompous-share-menu {
+  position: relative;
+  background-color: #efefef;
+  border:1px solid #000;
+  box-shadow: 0px 8px 8px 0px rgba(0,0,0,0.2);
+  right:40px;
+  width:222px;
+}
+
+.pompous-share-menu .button {
+  background-color:#efefef;
+  text-align:left;
+  white-space: nowrap; 
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0;
+  border:0;
+  width:220px;
+  vertical-align: middle;
+  cursor:pointer;
+}
+
+.pompous-share-menu .button:hover {
+  background-color:#ddd;
+}
+
 /* ================= "Skin" css end ================= */
 
 
@@ -46,7 +76,8 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
    The most important style is position: absolute; most others are by default.
    The width and height are irrelevant: they are overwritten later.
 */
-.pompous-stage {
+.pompous-stage 
+{
   all: initial;
   position: absolute;
   width: 800px;
@@ -61,7 +92,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   transform: translate(-50%, -50%) scale(1.0);
   transform-origin: center center;
   outline: none;
-  /* prevent selecting the button icons and text on double-click: */
   -webkit-user-select: none;        
   -moz-user-select: none;
   -ms-user-select: none;
@@ -94,7 +124,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   --pp-transform-from: translateX(1000px);
   transform: translateX(0px);
   --pp-transition-timing-function: easeOutBack;
-  --pp-transition-precision: 4;
   transition-duration: 1.5s;
 }
 
@@ -104,7 +133,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   --pp-transform-from: translateX(-1000px) rotate(0deg);
   transform: translateX(0px) rotate(1800deg);
   --pp-transition-timing-function: easeOutBack;
-  --pp-transition-precision: 4;
   transition-duration: 2.0s;
 }
 
@@ -114,7 +142,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   --pp-transform-from: perspective(400px) rotateY(-360deg);
   transform: perspective(400px) rotateY(0deg);
   --pp-transition-timing-function: easeOutCubic;
-  --pp-transition-precision: 4;
   transition-duration: 1.5s;
 }
 
@@ -124,7 +151,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   --pp-transform-from: perspective(400px) rotateX(90deg);
   transform: perspective(400px) rotateX(0deg);
   --pp-transition-timing-function: easeOutBounce;
-  --pp-transition-precision: 4;
   transition-duration: 1s;
 }
 
@@ -134,7 +160,6 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   --pp-transform-from: translateX(-1000px);
   transform: translateX(0px);
   --pp-transition-timing-function: easeOutBack;
-  --pp-transition-precision: 4;
   transition-duration: 1.5s;
 }
 
@@ -264,7 +289,7 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   word-break: break-word;
   line-height: 1;
   border-style: none;
-  color:red;
+  color: rgb(211,0,0);
 }
 
 .text-exclamation
@@ -286,7 +311,25 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
   word-break: break-word;
   line-height: 1;
   border-style: none;
-  color: red;
+  color: rgb(211,0,0);
+}
+
+.scale-exclamation 
+{
+  transition-property: transform;
+  --pp-transform-from: translateX(0px) translateY(0px) scale(1);
+  transform: translateX(30px) translateY(-110px) scale(3);
+  transition-duration: 1.5s;
+}
+
+.covid-image
+{
+  position: absolute;
+  visibility: hidden;
+  width: 90px;
+  height: 90px;
+  top: 940px;
+  left: 1183px;
 }
 
 /* ================= Slideshow css end ================= */
@@ -296,22 +339,23 @@ html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}main{display:b
 <body>
   <!-- ================= The "stage" div contains all animated content and the "skin" buttons: ================= -->
   <div data-pompous-player-stage
-    data-skin="carousel"
+    data-skin="carousel" data-auto-start="true"
     data-web-fonts='{"google": {"families":["Srisakdi:700"]}}'
+    data-design-width="1920" data-design-height="1080"
     class="pompous-stage" tabindex="0">
     
     <!-- Begin animated content html -->
-    <div data-class-initial="text-stay" data-classes="show bounceInRight delay-1.0s">Stay</div>
-    <div data-class-initial="text-at-home" data-classes="show bounceInLeft delay-1.0s">at home</div>
-    <div data-class-initial="text-safe" data-classes="fade-in flipIn delay-1.7s">s
+    <div class="text-stay" data-classes="show bounceInRight delay-0s">Stay</div>
+    <div class="text-at-home" data-classes="show bounceInLeft delay-0s">at home</div>
+    <div class="text-safe" data-classes="fade-in flipIn delay-0.7s">s
 a
 f
 e
     </div>
     
-    <div data-class-initial="text-during-the" data-classes="show bounceInRight delay-2.0s">during the</div>
-    <div data-class-initial="text-coronavirus" data-classes="fade-in flipInX delay-3.1s">coronavirus</div>
-    <div data-class-initial="text-outbreak" data-classes="fade-in flipIn delay-3.7s">o
+    <div class="text-during-the" data-classes="show bounceInRight delay-1.0s">during the</div>
+    <div class="text-coronavirus" data-classes="fade-in flipInX delay-2.1s">coronavirus</div>
+    <div class="text-outbreak" data-classes="fade-in flipIn delay-2.7s">o
 u
 t
 b
@@ -320,10 +364,43 @@ e
 a
 k
     </div>
-    <div data-class-initial="text-exclamation" data-classes="show rotateInLeft delay-4s">!</div>
+    <!-- Example of how to apply more-than-one animations on an "actor": just separate the animation classes with a "," -->
+    <div class="text-exclamation" data-classes="show rotateInLeft delay-3s, scale-exclamation delay-5s">!</div>
+    <div class="covid-image" data-classes="fade-in delay-6s"><img src="https://storage.googleapis.com/pompous-photos-static/sample-images/misc/covid19-red.svg"></img></div>
     <!-- End animated content html -->
    
     <!-- Begin "skin" html (has just two buttons: Play/pause/rewind and Full-Screen-on-off -->
+    <!-- Share -->
+    <div class="pompous-carousel-001-button pompous-carousel-001-share-button pp-selector-share-button pompous-carousel-001-top-buttons" onClick="getPpSkin(event).toggleShowHideShareMenu(event)" >
+      <svg stroke="white" style="fill:white" viewBox="0 0 512 512">
+        <circle cx="256" cy="256" r="230"  stroke-width="30" fill="rgba(0, 0, 0, 0.4)" />
+        <path d="M342.906,210.25c22.733,0,41.172-18.438,41.172-41.172c0-22.719-18.438-41.156-41.172-41.156
+          c-22.734,0-41.172,18.438-41.172,41.156c0,1.781,0.312,3.438,0.516,5.156l-104.328,52.438
+          c-7.438-7.312-17.594-11.844-28.844-11.844c-22.719,0-41.156,18.438-41.156,41.156c0,22.734,18.438,41.188,41.156,41.188
+          c11.484,0,21.859-4.734,29.328-12.328l103.891,52.594c-0.25,1.812-0.562,3.595-0.562,5.453c0,22.75,18.438,41.188,41.173,41.188
+          c22.733,0,41.172-18.438,41.172-41.188c0-22.703-18.438-41.172-41.172-41.172c-11.609,0-22.062,4.875-29.531,12.609l-103.719-52.5
+          c0.266-1.922,0.594-3.828,0.594-5.844c0-2.219-0.328-4.391-0.656-6.547l103.562-52.016
+          C320.656,205.281,331.188,210.25,342.906,210.25z"/>
+      </svg>
+
+      <div class="pompous-share-menu pp-selector-share-menu" style="display:none;">
+        <button class="button" data-sharer="facebook"   data-title="" data-url=""><i class="fab fa-facebook-f" style="color:#3b5998" ></i>Share on Facebook</button>
+        <button class="button" data-sharer="twitter"    data-title="" data-hashtags="pompousphotos.com, slideshow, presentation" data-url=""> <i class="fab fa-twitter"  style="color:#55acee"></i>Share on Twitter</button>
+        <button class="button" data-sharer="linkedin"   data-url=""><i class="fab fa-linkedin-in"  style="color:#007bb5"></i>Share on LinkedIn</button>
+        <button class="button" onClick="getPpSkin(event).shareViaGmail()"><i class="fas fa-envelope" style="background-image:  linear-gradient(red, yellow, green,blue);color:transparent; -webkit-background-clip: text;background-clip: text;}" ></i>Share via Gmail</button>
+        <button class="button" data-sharer="email"      data-title="" data-url="" data-subject="Check out this slideshow" data-to=""><i class="fas fa-envelope" ></i>Share via other email</button>
+        <button class="button" data-sharer="whatsapp"   data-title="" data-url=""><i class="fab fa-whatsapp" style="color:green"></i>Share on Whatsapp</button>   
+        <button class="button" data-sharer="pinterest"  data-url=""><i class="fab fa-pinterest-p" style="color:red"></i>Share on Pinterest</button>
+        <button class="button" data-sharer="reddit"     data-title="" data-url=""><i class="fab fa-reddit-alien" style="color:red"></i>Share on Reddit</button>
+        <button class="button" data-sharer="flipboard"  data-title="" data-url=""><i class="fab fa-flipboard"  style="color:red"></i>Share on Flipboard</button>
+        <button class="button" data-sharer="hackernews" data-title="" data-url=""><i class="fab fa-hacker-news" style="color:orange"></i>Share on Hackernews</button>
+        <button class="button" data-sharer="weibo"      data-title="" data-url=""><i class="fab fa-weibo"  style="color:orange"></i>Share on Weibo</button>
+        <button class="button" data-sharer="baidu"      data-title="" data-url=""><i class="fas fa-paw" style="color:blue"></i>Share on baidu</button>
+        <button class="button" data-sharer="okru"       data-title="" data-url="" ><i class="fab fa-odnoklassniki" style="color:orange"></i>Share on Ok.ru</button>
+        <button class="button" onClick="getPpSkin(event).copyPresentationUrlToClipboard()"><i class="fas fa-copy"></i>Copy URL to Clipboard</button>
+      </div>
+    </div>
+    
     <!-- Play/pause/rewind button -->
     <div class="pompous-carousel-001-button pompous-carousel-001-play-pause-resume-button pp-selector-play-pause-resume-button pompous-carousel-001-top-buttons" onmousedown="getPpPlayer(event).togglePlayPauseResumeRewind(true)">
       <svg stroke="white" style="fill:white" viewBox="0 0 512 512">

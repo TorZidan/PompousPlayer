@@ -73,6 +73,11 @@ ppDocumentReady( () => {
 
 // On each window resize: resize the stage div element to fit the window/iframe width AND height:
 window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
+
+setTimeout( () => {
+  // Do another scale after 10ms, as a workaround of a Chrome bug on desktop:
+  updateStageScaleToFitWidthAndHeight(pompousPlayer);
+}, 10);
 </script>
 <style>
 /* ================= Slideshow css begin ================= */

@@ -157,7 +157,7 @@ const pompousOptions = {
 };
 const pompousPlayer = new PompousPlayer(pompousOptions);
 
-function updateStageScaleToFitWidth(pompousPlayer) {
+function scaleToFitWindowWidth(pompousPlayer) {
   if(pompousPlayer.isInFullScreen()) {
     // Do nothing in full screen.It's handled by the player code.
     return;
@@ -167,20 +167,25 @@ function updateStageScaleToFitWidth(pompousPlayer) {
   const width = $theStageContainerDiv.width();
   const options = pompousPlayer.getOptions();
   const newScale = width / options["design-width"];  
-  console.warn("Scaling stage to "+newScale);
+  console.warn("width="+width+"; scaling stage to "+newScale);
   pompousPlayer.scaleStage(newScale);
 }
  
-// On each window resize: resize the stage div element to fit the available width:
-window.addEventListener("resize", () => {updateStageScaleToFitWidth(pompousPlayer)});
+// On each window resize: scale the stage div element to fit it's parent div width:
+window.addEventListener("resize", () => {scaleToFitWindowWidth(pompousPlayer)});
 
 ppDocumentReady( () => {
   pompousPlayer.init();
-  //Upon page load, resize the stage div element to fit the window/iframe width AND height:
-  updateStageScaleToFitWidth(pompousPlayer);
+  //Upon page load, scale the stage div element to fit it's parent div width:
+  scaleToFitWindowWidth(pompousPlayer);
   pompousPlayer.getStageElement().focus();
   
   changeSkin("Video");
+  
+  setTimeout( () => {
+    // Do another scale after 10ms, as a workaround of a Chrome bug on desktop:
+    scaleToFitWindowWidth(pompousPlayer);
+  }, 10);
 });
 
 function changeSkin(skinName) {
@@ -202,6 +207,10 @@ function changeSkin(skinName) {
 }
 </script>
 <style>
+body{
+  margin:0;
+}
+
 /* ================= Slideshow css begin ================= */
 
 /* The image is setup as a background image.

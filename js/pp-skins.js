@@ -940,9 +940,11 @@ class PompousVideoLikeNavigation {
     }
   }    
   
-  copyPresentationUrlToClipboard() {
+  // Note: If the presentation is running in an iFrame, this will copy the iframe's url into the clipboard.
+  // This may not be what you want. The 
+  copyPresentationUrlToClipboard(url) {
     const el = document.createElement("textarea");
-    el.value = window.location.href;
+    el.value = url || window.location.href;
     el.setAttribute("readonly", "");
     el.style.position = "absolute";
     el.style.left = "-9999px";
