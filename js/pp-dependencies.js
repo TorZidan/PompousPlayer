@@ -352,10 +352,7 @@ ppDocumentReady( () => {
     } else {
       console.warn("Unknown value in stage attribute 'data-auto-resize':'"+fitMode+"'! Will use 'none'.");
     }
-        
-    
-    
-    
+
     // Setup mobile swipe/touch actions:
     if(pompousEventNotifier instanceof PompousVideoLikeNavigation) {
       /** Listen for touch events on mobile devices: */

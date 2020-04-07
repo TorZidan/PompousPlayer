@@ -68,6 +68,7 @@ There are some more, optional attributes that can be added to the 'stage' &lt;di
 ```
 <div data-pompous-player-stage 
   data-skin="derive-from-html|video-like|carousel|blank"    (the default is "derive-from-html")
+  data-auto-resize="width-and-height|width|none"            (the default is "width-and-height")
   data-auto-start="true|false|jump_to_1st_nonskippable|jump_to_time_0"   (the default is "true")
   data-auto-start-audio-muted="true|false"   (the default is "true")
   data-auto-restart-at-end="true|false"   (the default is "false")
@@ -111,30 +112,22 @@ const pompousOptions = {
 // This will also initialize the Pompous Player at the right time (at page load, upon "document ready"):
 const pompousPlayer = new PompousPlayer(pompousOptions);
 
-// Then, optionally, add a window resize listener:
+// Optionally, add a window resize listener:
 window.addEventListener("resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
 
-// Then, optionally, add a mobile swipe listener (not shown, but you can see it in the demos)
-</script>
-
-```
-
-Note: The code above can be written in even more condensed way:
-
-```javascript
-<script>
-const pompousPlayer = new PompousPlayer({
-  "stage-id": "#the-pompous-stage",
-  "auto-start": "true",
-  "design-width": 1920,
-  "design-height": 1080,
-  "player-event-listener": new PompousVideoLikeNavigation({"stage-id":"#the-pompous-stage", "hide-share-button":false}),
+// Executes at page load, once the page "document" is ready:
+ppDocumentReady( () => {
+  pompousPlayer.init();
+  
+  //Upon page load, resize the stage element to fit the window/iframe width AND height:
+  updateStageScaleToFitWidthAndHeight(pompousPlayer);
+  
+  // Then, optionally, add a mobile swipe listener (not shown, but you can see it in the demos)
 });
-window.addEventListener( "resize", () => {updateStageScaleToFitWidthAndHeight(pompousPlayer)});
-// Then, optionally, add a mobile swipe listener (not shown, but you can see it in the demos)
 </script>
-
 ```
+
+Note: The code above can be written in even more condensed way, but it may be less readable.
 
 Above we created a navigation object, an "options" object, a player object, and we wire them up.
 The code gets executed when the presentation web page loads, even before the "document ready" (aka "DOMContentLoaded" event), and that's ok, as we don't do much at that time. The player internals will subscribe for the "document ready" event; when it fires, the player will start pre-loading images, audio, videos, fonts, etc, and will eventually be ready to play; it will also start auto playing, if it finds the player option `autoStart: "true",`.
