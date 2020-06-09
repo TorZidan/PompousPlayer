@@ -109,7 +109,6 @@ const pompousOptions = {
   "player-event-listener": pompousNavigation,
 };
 
-// This will also initialize the Pompous Player at the right time (at page load, upon "document ready"):
 const pompousPlayer = new PompousPlayer(pompousOptions);
 
 // Optionally, add a window resize listener:

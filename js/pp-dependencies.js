@@ -50,6 +50,15 @@ d=k>=NEWTON_MIN_SLOPE?newtonRaphsonIterate(d,f,a,c):0===k?f:binarySubdivide(d,e,
  * and https://www.pompousphotos.com/commercial_license
  */
 
+function PpUtils() {
+}
+PpUtils.prototype = {
+  constructor: PpUtils,
+  ppDocumentReady: function(callback){if(document.readyState!='loading'){callback()} else {document.addEventListener('DOMContentLoaded', callback)}}
+  // TODO: Move all functions below into here.
+};
+var PpUtils = new PpUtils();
+
 function ppDocumentReady(callback){if(document.readyState!='loading'){callback()} else {document.addEventListener('DOMContentLoaded', callback)}}
 
 function isInIframe() {try{return window.self!==window.top}catch(e){return true}}const isInIframeBool = isInIframe();
@@ -261,7 +270,6 @@ const transitionTimingFunctions = {
  "swing":          (t) => {return 0.5 - Math.cos(percentComplete * Math.PI)/2;},
  "spring":         (t) => {return 1 - (Math.cos(t * 4.5 * Math.PI) * Math.exp(-t * 6));},
 }
-
 
 // The code below is part of the "Zero Javascript code" option. It allows defining presentations without having to write any JS code.
 ppDocumentReady( () => {

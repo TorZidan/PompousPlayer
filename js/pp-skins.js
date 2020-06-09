@@ -913,6 +913,10 @@ class PompousVideoLikeNavigation {
     // Show the "restart from beginning" button:
     this.$rewindToBeginningButton.html("<i class='fas fa-sync-alt'></i>");
     this.$rewindToBeginningButton.css("cursor", "pointer");
+    
+    if(isInIframe()) {
+      window.top.postMessage("pp.performanceFinished", "*");
+    }
   }
   
   performanceFinishedBackward() {
@@ -1295,6 +1299,10 @@ class PompousCarouselNavigation {
     this.$stage.find(".pp-selector-pause").css("display", "none");
     this.$stage.find(".pp-selector-rewind").css("display", "block");
     this.$nextAnimationButton.css("opacity", 0.5);
+    
+    if(isInIframe()) {
+      window.top.postMessage("pp.performanceFinished", "*");
+    }
   }
   
   performanceFinishedBackward() {
@@ -1446,6 +1454,10 @@ class PompousBlankNavigation {
   
   performanceFinished() {
     this.$currentStateDiv.text("PERFORMANCE_FINISHED");
+    
+    if(isInIframe()) {
+      window.top.postMessage("pp.performanceFinished", "*");
+    }
   }
   
   performanceFinishedBackward() {
